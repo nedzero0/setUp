@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    username: root
+    password: 182008
+    url: jdbc:mysql://127.0.0.1:3306/share album?&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    initia1size: 5
+    minId1e: 5
+    maxActive: 20
+    maxwait: 6000
+    timeBetweenEvictionRunsMi11is: 6000
+    minEvictableIdleTimeMi1lis: 30000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileId1e: true
+    test0nBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #配置监控统计拦截的filters，去掉后监控界面sqL无法统计， 'wall '用于防火墙
+    filters: stat,wal1, log4j
+    maxPoo1PreparedStatementPerConnectionSize: 20
+    useGloba1DataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlNillis=500
+#schema :
+#- classpath: department.sql
