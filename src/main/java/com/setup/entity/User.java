@@ -10,15 +10,36 @@ public class User {
     //@GeneratedValue(strategy = GenerationType.IDENTITY)//自增主键
     private int uid;
     private String username;
-    private String password;
     private String phone;
+    private String password;
     private String email;
     private String profile_photo;//用户名头像地址
-    private Date birthday;
+    private String birthday;
     private int age;
+    private String sex;
+    private String address;
+    private String autograph;//个性签名
 
     public User() {
 
+    }
+
+    public User(int uid,String username, String email, String profile_photo, String birthday, int age, String sex, String address, String autograph) {
+        this.uid=uid;
+        this.username = username;
+        this.email = email;
+        this.profile_photo = profile_photo;
+        this.birthday = birthday;
+        this.age = age;
+        this.sex = sex;
+        this.address = address;
+        this.autograph = autograph;
+    }
+
+    public User(String username, String phone, String password) {
+        this.username = username;
+        this.phone = phone;
+        this.password = password;
     }
 
     @Override
@@ -32,15 +53,42 @@ public class User {
                 ", profile_photo='" + profile_photo + '\'' +
                 ", birthday=" + birthday +
                 ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", address='" + address + '\'' +
+                ", autograph='" + autograph + '\'' +
                 '}';
     }
 
-    public int getId() {
+    public int getUid() {
         return uid;
     }
 
-    public void setId(int uid) {
+    public void setUid(int uid) {
         this.uid = uid;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAutograph() {
+        return autograph;
+    }
+
+    public void setAutograph(String autograph) {
+        this.autograph = autograph;
     }
 
     public String getUsername() {
@@ -83,11 +131,11 @@ public class User {
         this.profile_photo = profile_photo;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

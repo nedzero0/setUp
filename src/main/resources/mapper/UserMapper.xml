@@ -3,7 +3,38 @@
                 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         <!--上面的是映射文件头-->
 <mapper namespace="com.setup.mapper.UserMapper">
-<select id="queryUserList" resultType="com.setup.entity.User">
+    <select id="queryUserList" resultType="com.setup.entity.User">
        select * from user;
     </select>
+
+    <select id="queryOne" resultType="com.setup.entity.User">
+       SELECT * FROM `user`
+      WHERE phone= #{phone} AND `password` = #{password}
+    </select>
+
+    <insert id="insertOne" parameterType="com.setup.entity.User">
+     /* MD5加密 insert into user(username,password,phone) values ('伟大',MD5('abc123'),'15126547')*/
+      insert into user(username,password,phone) values (#{username},#{password},#{phone})
+    </insert>
+
+    <!--更新用户，但不更新电话和密码-->
+    <update id="updateUser" parameterType="com.setup.entity.User">
+       UPDATE `user` SET username = #{username},email=#{email},profile_photo=#{profile_photo},
+       birthday=#{birthday},age=#{age},sex=#{sex},address=#{address},autograph=#{autograph}
+       where uid = #{uid}
+    </update>
+
+    <!--查看该电话是否已经被注册-->
+    <select id="queryPhone" resultType="java.lang.Integer">
+       SELECT uid FROM `user`
+       WHERE phone = #{phone}
+    </select>
+
+    <!--查看该用户名是否可用-->
+    <select id="queryUserName" resultType="java.lang.Integer">
+       SELECT uid FROM `user`
+       WHERE username = #{username}
+    </select>
+
+
 </mapper>
