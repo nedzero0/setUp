@@ -15,7 +15,7 @@ public interface AlbumMapper {
      public List<Album> queryAlbum();
      //删除相册
      public boolean delAlbum(int aid);
-     //啊啊啊啊
+     //啊啊啊啊呃呃呃呃呃呃
 
 
 
