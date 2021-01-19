@@ -9,9 +9,10 @@ public class Image {
     private String i_name;// 图片名称加后缀
     private int i_size;//图片大小
     private String i_describe;//图片描述
+    private String i_contentType;//jpg还是png等格式，如果不是图片类型则不能上传
     private Date i_time;//图片拍摄/创建时间
     private Date i_uploadTime;//图片上传时间
-    private String i_beforePath;//图片以前的地址
+    private String i_beforePath;//图片以前在相册的地址
     private String i_path;//图片的相对路径:即图片在服务器上的相对路径
     private String md5;//判断是否是同一张图片
     private int status;//状态码  判断当前图片是在相册还是在回收站  0表示在回收站   1表示在相册
@@ -28,6 +29,7 @@ public class Image {
                 ", i_name='" + i_name + '\'' +
                 ", i_size=" + i_size +
                 ", i_describe='" + i_describe + '\'' +
+                ", i_contentType='" + i_contentType + '\'' +
                 ", i_time=" + i_time +
                 ", i_uploadTime=" + i_uploadTime +
                 ", i_beforePath='" + i_beforePath + '\'' +
@@ -35,6 +37,14 @@ public class Image {
                 ", md5='" + md5 + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public String getI_contentType() {
+        return i_contentType;
+    }
+
+    public void setI_contentType(String i_contentType) {
+        this.i_contentType = i_contentType;
     }
 
     public int getI_id() {
