@@ -6,13 +6,15 @@ import java.sql.Date;
 public class Image {
     private int i_id;//图片id
     private int aid;//所属相册id
-    private String i_name;//图片名称
+    private String i_name;// 图片名称加后缀
     private int i_size;//图片大小
     private String i_describe;//图片描述
     private Date i_time;//图片拍摄/创建时间
     private Date i_uploadTime;//图片上传时间
+    private String i_beforePath;//图片以前的地址
     private String i_path;//图片的相对路径:即图片在服务器上的相对路径
     private String md5;//判断是否是同一张图片
+    private int status;//状态码  判断当前图片是在相册还是在回收站  0表示在回收站   1表示在相册
 
     public Image() {
 
@@ -28,17 +30,11 @@ public class Image {
                 ", i_describe='" + i_describe + '\'' +
                 ", i_time=" + i_time +
                 ", i_uploadTime=" + i_uploadTime +
+                ", i_beforePath='" + i_beforePath + '\'' +
                 ", i_path='" + i_path + '\'' +
                 ", md5='" + md5 + '\'' +
+                ", status=" + status +
                 '}';
-    }
-
-    public Date getI_time() {
-        return i_time;
-    }
-
-    public void setI_time(Date i_time) {
-        this.i_time = i_time;
     }
 
     public int getI_id() {
@@ -81,12 +77,28 @@ public class Image {
         this.i_describe = i_describe;
     }
 
+    public Date getI_time() {
+        return i_time;
+    }
+
+    public void setI_time(Date i_time) {
+        this.i_time = i_time;
+    }
+
     public Date getI_uploadTime() {
         return i_uploadTime;
     }
 
     public void setI_uploadTime(Date i_uploadTime) {
         this.i_uploadTime = i_uploadTime;
+    }
+
+    public String getI_beforePath() {
+        return i_beforePath;
+    }
+
+    public void setI_beforePath(String i_beforePath) {
+        this.i_beforePath = i_beforePath;
     }
 
     public String getI_path() {
@@ -103,5 +115,13 @@ public class Image {
 
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

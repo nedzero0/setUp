@@ -9,7 +9,7 @@ public class Album {
       private String a_name;//相册名称
       private String a_describe;//相册描述
       private String a_coverPath;//相册封面地址
-      private Date a_createTime;//相册创建时间
+      private String a_createTime;//相册创建时间
       private int a_authority;//相册权限  1私有  2 公开  3好友可见
       private String a_theme;//相册主题  如：情侣，风景等
       private int a_count;//相册内照片的数量
@@ -18,11 +18,29 @@ public class Album {
       private int a_stars;//相册收藏数
       private int a_assess;//相册评价数
       private BigDecimal coordinate;//相册 经纬度
+      private String location;//相册的地理位置
       private String a_path;//相册路径
 
 
     public Album() {
 
+    }
+
+    public Album(int uid, String a_name, String a_createTime, String a_path) {
+        this.uid = uid;
+        this.a_name = a_name;
+        this.a_createTime = a_createTime;
+        this.a_path = a_path;
+    }
+
+    public Album(int aid,String a_name, String a_describe, String a_coverPath, int a_authority, String a_theme,String location) {
+        this.aid = aid;
+        this.a_name = a_name;
+        this.a_describe = a_describe;
+        this.a_coverPath = a_coverPath;
+        this.a_authority = a_authority;
+        this.a_theme = a_theme;
+        this.location = location;
     }
 
     @Override
@@ -33,7 +51,7 @@ public class Album {
                 ", a_name='" + a_name + '\'' +
                 ", a_describe='" + a_describe + '\'' +
                 ", a_coverPath='" + a_coverPath + '\'' +
-                ", a_createTime=" + a_createTime +
+                ", a_createTime='" + a_createTime + '\'' +
                 ", a_authority=" + a_authority +
                 ", a_theme='" + a_theme + '\'' +
                 ", a_count=" + a_count +
@@ -42,9 +60,12 @@ public class Album {
                 ", a_stars=" + a_stars +
                 ", a_assess=" + a_assess +
                 ", coordinate=" + coordinate +
+                ", location='" + location + '\'' +
                 ", a_path='" + a_path + '\'' +
                 '}';
     }
+
+
 
     public int getAid() {
         return aid;
@@ -86,11 +107,11 @@ public class Album {
         this.a_coverPath = a_coverPath;
     }
 
-    public Date getA_createTime() {
+    public String getA_createTime() {
         return a_createTime;
     }
 
-    public void setA_createTime(Date a_createTime) {
+    public void setA_createTime(String a_createTime) {
         this.a_createTime = a_createTime;
     }
 
@@ -156,6 +177,14 @@ public class Album {
 
     public void setCoordinate(BigDecimal coordinate) {
         this.coordinate = coordinate;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getA_path() {
