@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 @Mapper
 public interface ImageMapper {
-    //增：上传图片，即插入图片
-    public int insertImage(Image image);
+    //增：批量上传图片，即插入图片
+    public int insertImages(List<Image> imageList);
     //查看该相册下的所有图片
     public List<Image> queryImageByAid(int aid);
     //更新图片原信息,即图片名称和描述

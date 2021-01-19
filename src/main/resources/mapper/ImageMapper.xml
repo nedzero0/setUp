@@ -3,8 +3,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--上面的是映射文件头-->
 <mapper namespace="com.setup.mapper.ImageMapper">
-   <insert id="insertImage" parameterType="com.setup.entity.Image">
-      insert  into image values ()
+   <insert id="insertImages" parameterType="java.util.List">
+      insert  into image
+      (aid,i_name,i_size,i_describe,i_contentType,i_time,i_uploadTime,i_beforePath,i_path,md5)
+      values 
+      <foreach collection="list" item="image" index="index" separator=",">
+         (
+         #{image.aid},
+         #{image.i_name},
+         #{image.i_size},
+         #{image.i_describe},
+         #{image.i_contentType},
+         #{image.i_time},
+         #{image.i_uploadTime},
+         #{image.i_beforePath},
+         #{image.i_path},
+         #{image.md5}
+         )
+      </foreach>
    </insert>
 
 

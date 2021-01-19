@@ -10,8 +10,8 @@ public class Image {
     private int i_size;//图片大小
     private String i_describe;//图片描述
     private String i_contentType;//jpg还是png等格式，如果不是图片类型则不能上传
-    private Date i_time;//图片拍摄/创建时间
-    private Date i_uploadTime;//图片上传时间
+    private String i_time;//图片拍摄/创建时间
+    private String i_uploadTime;//图片上传时间
     private String i_beforePath;//图片以前在相册的地址
     private String i_path;//图片的相对路径:即图片在服务器上的相对路径
     private String md5;//判断是否是同一张图片
@@ -19,6 +19,19 @@ public class Image {
 
     public Image() {
 
+    }
+
+    public Image(int aid, String i_name, int i_size, String i_describe, String i_contentType, String i_time, String i_uploadTime, String i_beforePath, String i_path, String md5) {
+        this.aid = aid;
+        this.i_name = i_name;
+        this.i_size = i_size;
+        this.i_describe = i_describe;
+        this.i_contentType = i_contentType;
+        this.i_time = i_time;
+        this.i_uploadTime = i_uploadTime;
+        this.i_beforePath = i_beforePath;
+        this.i_path = i_path;
+        this.md5 = md5;
     }
 
     @Override
@@ -87,19 +100,19 @@ public class Image {
         this.i_describe = i_describe;
     }
 
-    public Date getI_time() {
+    public String getI_time() {
         return i_time;
     }
 
-    public void setI_time(Date i_time) {
+    public void setI_time(String i_time) {
         this.i_time = i_time;
     }
 
-    public Date getI_uploadTime() {
+    public String getI_uploadTime() {
         return i_uploadTime;
     }
 
-    public void setI_uploadTime(Date i_uploadTime) {
+    public void setI_uploadTime(String i_uploadTime) {
         this.i_uploadTime = i_uploadTime;
     }
 

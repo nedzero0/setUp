@@ -1,8 +1,10 @@
 package com.setup;
 
 import com.setup.entity.Album;
+import com.setup.entity.Image;
 import com.setup.entity.User;
 import com.setup.mapper.AlbumMapper;
+import com.setup.mapper.ImageMapper;
 import com.setup.mapper.UserMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.UnsatisfiedServletRequestParameterException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 /*
@@ -37,10 +40,23 @@ public class test {
     private UserMapper userMapper;
     @Autowired
     private AlbumMapper albumMapper;
-
+    @Autowired
+    private ImageMapper imageMapper;
 
     @Test
     public void test() {
+
+        //image测试
+        Image image1 = new Image(1,"订单11",12,"这是一个订单","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
+        Image image2 = new Image(1,"订单22",3201,"这是第二个订单","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
+
+        List<Image> images = new ArrayList<>();
+        images.add(image1);
+        images.add(image2);
+
+      System.out.println(imageMapper.insertImages(images));
+
+
         //相册测试
        /* Album album = new Album(2,"李四的相册1","2021-11-23","4445");
         System.out.println(albumMapper.insertAlbum(album));*/
@@ -50,9 +66,9 @@ public class test {
 
         //System.out.println(albumMapper.delAlbum(2));
 
-        Album album = new Album(3,"3333","啊啊啊啊啊","1212121",3,"情侣","成都市成都东软学院");
+     /*   Album album = new Album(3,"3333","啊啊啊啊啊","1212121",3,"情侣","成都市成都东软学院");
         System.out.println(albumMapper.updateAlbum(album));
-
+*/
 
         //用户测试
 
