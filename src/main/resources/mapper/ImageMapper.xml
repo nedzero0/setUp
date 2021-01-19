@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--上面的是映射文件头-->
 <mapper namespace="com.setup.mapper.ImageMapper">
+   <!--批量添加-->
    <insert id="insertImages" parameterType="java.util.List">
       insert  into image
       (aid,i_name,i_size,i_describe,i_contentType,i_time,i_uploadTime,i_beforePath,i_path,md5)
