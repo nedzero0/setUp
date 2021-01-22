@@ -24,5 +24,29 @@
       </foreach>
    </insert>
 
+   <!--查看该相册下的所有图片-->
+  <select id="queryImageByAid" parameterType="int" resultType="com.setup.entity.Image">
+     SELECT *FROM image WHERE  status = 1 and aid = #{aid}
+  </select>
+
+<!--   更新图片原信息,即图片名称和描述-->
+  <update id="updateImage">
+     UPDATE image SET i_name = #{name},i_describe = #{describe}
+     WHERE i_id = #{i_id}
+  </update>
+
+<!--   回收图片，没有删除，只是放到了回收站（假的，不做这一步），只改变了状态码-->
+  <update id="recoveryImage">
+       UPDATE image SET `status` = 0 WHERE i_id = #{i_id}
+  </update>
+<!--   从回收站还原图片,即更改状态码为 1-->
+  <update id="updateRecovery">
+      UPDATE image SET `status` = 1 WHERE i_id = #{i_id}
+  </update>
+
+   <!--   彻底删除图片，即删除状态码为0的-->
+   <delete id="delImage">
+       DELETE FROM image WHERE status = 0 AND i_id = #{i_id}
+  </delete>
 
 </mapper>

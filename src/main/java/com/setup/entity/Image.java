@@ -12,7 +12,7 @@ public class Image {
     private String i_contentType;//jpg还是png等格式，如果不是图片类型则不能上传
     private String i_time;//图片拍摄/创建时间
     private String i_uploadTime;//图片上传时间
-    private String i_beforePath;//图片以前在相册的地址
+    private String i_beforePath;//图片以前在相册的地址，可以不用
     private String i_path;//图片的相对路径:即图片在服务器上的相对路径
     private String md5;//判断是否是同一张图片
     private int status;//状态码  判断当前图片是在相册还是在回收站  0表示在回收站   1表示在相册

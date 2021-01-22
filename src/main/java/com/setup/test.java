@@ -47,14 +47,18 @@ public class test {
     public void test() {
 
         //image测试
-        Image image1 = new Image(1,"订单11",12,"这是一个订单","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
-        Image image2 = new Image(1,"订单22",3201,"这是第二个订单","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
+
+        int images = imageMapper.delImage(22);
+        System.out.println(images);
+
+       /* Image image1 = new Image(2,"333",12,"3333","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
+        Image image2 = new Image(1,"444",3201,"3333","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
 
         List<Image> images = new ArrayList<>();
         images.add(image1);
         images.add(image2);
 
-      System.out.println(imageMapper.insertImages(images));
+      System.out.println(imageMapper.insertImages(images));*/
 
 
         //相册测试
