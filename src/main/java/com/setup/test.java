@@ -47,10 +47,11 @@ public class test {
     private ImageService imageService;
 
 
+
+
     @Test
     public void test() {
-       //System.out.println(userService.signIn("1223546", "456789"));
-        System.out.println(imageService.queryImageByAid(2));
+
 
 
         //image测试

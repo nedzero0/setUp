@@ -24,3 +24,4 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlNillis=500
 #schema :
 #- classpath: department.sql
+
