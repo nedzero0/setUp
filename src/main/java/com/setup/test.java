@@ -6,6 +6,10 @@ import com.setup.entity.User;
 import com.setup.mapper.AlbumMapper;
 import com.setup.mapper.ImageMapper;
 import com.setup.mapper.UserMapper;
+import com.setup.service.ImageService;
+import com.setup.service.UserService;
+import com.setup.service.impl.AlbumServiceImpl;
+import com.setup.service.impl.UserServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,20 +40,23 @@ public class test {
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DemoApplication.class)
 public class test {
+
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
     @Autowired
-    private AlbumMapper albumMapper;
-    @Autowired
-    private ImageMapper imageMapper;
+    private ImageService imageService;
+
 
     @Test
     public void test() {
+       //System.out.println(userService.signIn("1223546", "456789"));
+        System.out.println(imageService.queryImageByAid(2));
+
 
         //image测试
 
-        int images = imageMapper.delImage(22);
-        System.out.println(images);
+       /* int images = imageMapper.delImage(22);
+        System.out.println(images);*/
 
        /* Image image1 = new Image(2,"333",12,"3333","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
         Image image2 = new Image(1,"444",3201,"3333","jpg","2020-1-2","2020-2-3","eeee","eeeee","ddd");
