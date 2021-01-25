@@ -26,13 +26,13 @@
 		<h1>Login Form</h1>
 		 <div class="alert-close"> </div> 			
 	</div>
-		<form>
+		<form action="/user/login" method="post">
 			<li>
-				<input type="text" class="text" value="Username" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Username';}"><a href="#" class=" icon user"></a>
+				<input type="text" name="UserPhone" class="text" value="UserPhone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Phone';}"><a href="#" class=" icon user"></a>
 			</li>
 				<div class="clear"> </div>
 			<li>
-				<input type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
+				<input type="password" name="Password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
 			</li>
 			<div class="clear"> </div>
 			<div class="submit">

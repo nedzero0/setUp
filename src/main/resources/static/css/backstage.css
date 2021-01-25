@@ -1,0 +1,21 @@
+.album{
+    width: 200px;
+    height: 240px;
+    background-color: #00FFFF;
+}
+.album-top{
+    padding: 10px 10px;
+}
+.album-top a img{
+    width: 180px;
+    height: 180px;
+}
+.album-bottom{
+    padding: 0px 10px;
+    height: 40px;
+    overflow: hidden;
+}
+.albums-1 ul li{
+    margin-right: 10px;
+    float: left;
+}
