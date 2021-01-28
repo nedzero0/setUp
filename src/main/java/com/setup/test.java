@@ -10,6 +10,7 @@ import com.setup.service.ImageService;
 import com.setup.service.UserService;
 import com.setup.service.impl.AlbumServiceImpl;
 import com.setup.service.impl.UserServiceImpl;
+import com.setup.utils.addAlbum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class test {
 
     @Test
     public void test() {
+
 
 
 

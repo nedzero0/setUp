@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>登陆页面</title>
+<title>注册页面</title>
 <link href="../static/css/style.css" rel="stylesheet" type="text/css" media="all"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -26,7 +26,11 @@
 		<h1>Login Form</h1>
 		 <div class="alert-close"> </div> 			
 	</div>
-		<form action="/user/login" method="post">
+		<form action="/user/register" method="post">
+			<li>
+				<input type="text" name="UserName" class="text" value="UserName" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'UserName';}">
+			</li>
+
 			<li>
 				<input type="text" name="UserPhone" class="text" value="UserPhone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Phone';}"><a href="#" class=" icon user"></a>
 			</li>
@@ -34,10 +38,14 @@
 			<li>
 				<input type="password" name="Password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
 			</li>
+
+			<li>
+				<input type="text" name="Code" value="Code" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Code';}">
+			</li>
+
 			<div class="clear"> </div>
 			<div class="submit">
-				<input type="submit" onclick="myFunction()" value="Sign in" >
-				<h4><a href="#">Lost your Password ?</a></h4>
+				<input type="submit" onclick="myFunction()" value="Register in" >
 						  <div class="clear">  </div>	
 			</div>
 				
@@ -46,10 +54,6 @@
 	</div>
 	</div>
 	<div class="clear"> </div>
-<!--- footer --->
-<div class="footer">
-	<p>Copyright &copy; 2014.</p>
-</div>
 <div style="display:none"><script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script></div>
 </body>
 </html>
