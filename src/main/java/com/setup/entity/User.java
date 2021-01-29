@@ -24,7 +24,15 @@ public class User {
 
     }
 
-    public User(int uid,String username, String email, String profile_photo, String birthday, int age, String sex, String address, String autograph) {
+    public User(String email, String birthday, String sex, String address, String autograph) {
+        this.email = email;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.address = address;
+        this.autograph = autograph;
+    }
+
+    public User(int uid, String username, String email, String profile_photo, String birthday, int age, String sex, String address, String autograph) {
         this.uid=uid;
         this.username = username;
         this.email = email;

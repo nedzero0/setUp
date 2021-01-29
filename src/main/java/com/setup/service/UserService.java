@@ -11,4 +11,5 @@ public interface UserService {
     public int register(User user);
     //更新个人信息
     public int updateUser(User user);
+
 }

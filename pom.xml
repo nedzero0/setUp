@@ -109,7 +109,17 @@
             <!-- 默认是 2.1.6 版本-->
         </dependency>
 
-
+        <!--导入json解析包-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.3</version>
+        </dependency>
 
     </dependencies>
 

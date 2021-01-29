@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>layout 个人信息 - Layui</title>
-    <link rel="stylesheet" href="../../static/css/layui.css">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css">
     <link rel="stylesheet" href="../../static/css/backstage.css">
 </head>
 <body class="layui-layout-body">
@@ -14,20 +14,118 @@
 
     <div class="layui-body" style="padding-left: 20px">
         <!-- 内容主体区域 -->
-        1111
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" th:value="${session.user.username}" required readonly="readonly" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="phone" th:value="${session.user.phone}"  required  readonly="readonly" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" th:value="${session.user.email}" required   placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">出生日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="birthday" th:value="${session.user.birthday}" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block" th:if="${session.user.sex eq '男'}">
+                    <input type="radio" name="sex" value="男" title="男" checked>
+                    <input type="radio" name="sex" value="女" title="女">
+                </div>
+                <div class="layui-input-block" th:if="${session.user.sex eq '女'}">
+                    <input type="radio" name="sex" value="男" title="男">
+                    <input type="radio" name="sex" value="女" title="女" checked>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" th:value="${session.user.address}" required  placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">个性签名</label>
+                <div class="layui-input-block">
+                    <textarea name="autograph" placeholder="请输入内容" th:text="${session.user.autograph}" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+
+
     </div>
 
 
     <div th:replace="~{own/commes :: footbar}"></div>
 
 </div>
-<script src="../../static/js/layui.js"></script>
+<script src="../../static/layui/layui.js"></script>
+<script src="../../static/js/jquery-3.3.1.js"></script>
 <script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交,使用ajax提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            alert(JSON.stringify(data.field));
+            $.ajax({
+                type:"post",
+                dataType:"JSON",
+                url:"/user/updatePersonDate",
+                data:JSON.stringify(data.field),
+                success:function (result) {
+                  /* console.log(result);*/
+                },
+                error:function () {
+                  /*alert("异常！")*/
+                },
+                contentType:"application/json;charsetset=UTF-8"
+            });
+
+            return false;
+        });
+    });
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element;
 
     });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
+    });
+
 </script>
 </body>
 </html>

@@ -17,11 +17,11 @@
       insert into user(username,password,phone) values (#{username},#{password},#{phone})
     </insert>
 
-    <!--更新用户，但不更新电话和密码-->
+    <!--更新用户，但不更新用户名,电话和密码,头像-->
     <update id="updateUser" parameterType="com.setup.entity.User">
-       UPDATE `user` SET username = #{username},email=#{email},profile_photo=#{profile_photo},
-       birthday=#{birthday},age=#{age},sex=#{sex},address=#{address},autograph=#{autograph}
-       where uid = #{uid}
+       UPDATE `user` SET email=#{email},birthday=#{birthday},
+       sex=#{sex},address=#{address},autograph=#{autograph}
+       where phone = #{phone}
     </update>
 
     <!--查看该电话是否已经被注册-->

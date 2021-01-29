@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 更换头像 - Layui</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../../static/css/backstage.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{own/commes :: topbar}"></div>
+    <div th:replace="~{own/commes :: sidebar}"></div>
+
+
+    <div class="layui-body" style="padding-left: 20px">
+
+
+
+        <!-- 内容主体区域 -->
+    </div>
+
+
+    <div th:replace="~{own/commes :: footbar}"></div>
+
+
+</div>
+<script src="../../static/layui/layui.js"></script>
+<script src="../../static/js/jquery-3.3.1.js"></script>
+
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+    });
+</script>
+</body>
+</html>

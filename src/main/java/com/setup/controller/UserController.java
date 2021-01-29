@@ -1,13 +1,21 @@
 package com.setup.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.setup.entity.Album;
 import com.setup.entity.User;
 import com.setup.service.AlbumService;
 import com.setup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -76,14 +84,32 @@ public class UserController {
     }
 
 
-/*
-    //到个人信息页面
-    @RequestMapping("/getPersonInfo")
-    public String getPersonInfo(){
-        return "own/personInfo";
-    }
+    //修改个人信息
+    @RequestMapping("/updatePersonDate")
+    @ResponseBody
+    public String updatePersonDate(HttpServletRequest req, HttpSession session, @RequestBody User user){
+      /*  JsonObject asJsonObject = new JsonParser().parse(obj).getAsJsonObject();
+        String data = asJsonObject.toString();
+        //System.out.println(data);
+        Gson gson = new Gson();
+        User user = gson.fromJson(data,User.class);*/
 
-*/
+        //System.out.println("User是："+user);
+        userService.updateUser(user);
+
+        User user1 = (User)session.getAttribute("user");
+        user1.setEmail(user.getEmail());
+        user1.setBirthday(user.getBirthday());
+        user1.setSex(user.getSex());
+        user1.setAddress(user.getAddress());
+        user1.setAutograph(user.getAutograph());
+
+        session.setAttribute("user",user1);
+
+       // System.out.println(user1);
+
+        return "success";
+    }
 
 
 
