@@ -96,17 +96,18 @@
             layer.msg(JSON.stringify(data.field));
             alert(JSON.stringify(data.field));
             $.ajax({
-                type:"post",
-                dataType:"JSON",
+                type:"POST",
+                dataType:"json",
                 url:"/user/updatePersonDate",
                 data:JSON.stringify(data.field),
+                contentType:"application/json",
                 success:function (result) {
                   /* console.log(result);*/
                 },
                 error:function () {
-                  /*alert("异常！")*/
-                },
-                contentType:"application/json;charsetset=UTF-8"
+                  alert("异常！")
+                }
+
             });
 
             return false;

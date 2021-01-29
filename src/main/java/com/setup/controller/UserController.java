@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,6 +110,25 @@ public class UserController {
        // System.out.println(user1);
 
         return "success";
+    }
+
+    //更改头像
+    @RequestMapping("/changeHead")
+    @ResponseBody
+    public String changeHead(MultipartFile file) {
+        System.out.println("111111111111111");
+        if (file.isEmpty()) {
+            System.out.println("0.0");
+        }
+        System.out.println(file.getOriginalFilename());
+        String str = "{\n" +
+                "  \"id\":0,\n" +
+                "  \"stuemail\": \"33@com\",\n" +
+                "  \"stuname\": \"xiaoming\" \n" +
+                "}";
+        //System.out.println(str);
+        return str;
+
     }
 
 
