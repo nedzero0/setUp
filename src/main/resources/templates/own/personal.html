@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>layout 后台大布局 - Layui</title>
-    <link rel="stylesheet" href="../../static/css/layui.css">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css">
     <link rel="stylesheet" href="../../static/css/backstage.css">
 </head>
 <body class="layui-layout-body">
@@ -67,17 +67,28 @@
         </div>
     </div>
 
-    <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
-    </div>
+    <div th:replace="~{own/commes :: footbar}"></div>
 </div>
-<script src="../../static/js/layui.js"></script>
+<script src="../../static/layui/layui.js"></script>
 <script>
+    //JavaScript代码区域
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+    });
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element;
 
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
     });
 </script>
 </body>
