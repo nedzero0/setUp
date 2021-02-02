@@ -26,9 +26,7 @@ public class UserServiceImpl  implements UserService {
         System.out.println(i+" "+j);
         if (i==null && j==null){
             userMapper.insertOne(user);
-            addAlbum.addOriginal(user.getPhone());
             return 1;
-
         }
         else {
             return 0;
@@ -39,6 +37,12 @@ public class UserServiceImpl  implements UserService {
     @Override
     public int updateUser(User user) {
         int i = userMapper.updateUser(user);
+        return i;
+    }
+
+    @Override
+    public int updateHead(String path, String phone) {
+        int i = userMapper.updateHead(path, phone);
         return i;
     }
 

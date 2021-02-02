@@ -28,7 +28,7 @@
     <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item">
             <a href="javascript:;">
-                <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                <img th:src="${session.headName}" class="layui-nav-img">
                 <span th:text="${session.user.username}"></span>
             </a>
             <dl class="layui-nav-child">

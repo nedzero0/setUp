@@ -23,6 +23,11 @@
        sex=#{sex},address=#{address},autograph=#{autograph}
        where phone = #{phone}
     </update>
+    <!--更新用户头像路径-->
+    <update id="updateHead">
+        UPDATE `user` SET profile_photo = #{path} WHERE phone = #{phone}
+    </update>
+
 
     <!--查看该电话是否已经被注册-->
     <select id="queryPhone" resultType="java.lang.Integer">

@@ -1,6 +1,7 @@
 package com.setup.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -17,4 +18,12 @@ public class MyMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/own/personInfo.html");
         registry.addViewController("/own/changeHead.html");
     }
+
+    //静态资源文件夹映射
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/setUp/**").addResourceLocations("file:D:/setUp/");
+    }
+
+
 }

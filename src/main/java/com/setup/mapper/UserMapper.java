@@ -25,7 +25,8 @@ public interface UserMapper{
 
     //更新密码，暂时不写
 
-    //
+    //更改用户头像，根据电话更新
+    public int updateHead(String path,String phone);
 
 
 
