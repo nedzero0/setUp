@@ -16,40 +16,33 @@
         <!-- 内容主体区域 -->
         <div style="margin-top: 20px;margin-bottom: 30px">
             <button type="button" class="layui-btn layui-btn-normal">上传照片/视频</button>
-            <button type="button" class="layui-btn layui-btn-normal">创建相册</button>
-        </div>
+            <button id="cr_albums" type="button" data-method="setTop" class="layui-btn layui-btn-normal addBu">创建相册</button>
+
+       </div>
 
         <div class="albums">
             <div class="albums-1">
                 <ul style="float: left">
-                   <!--<li>
-                    <div class="album">
-                      <div class="album-top">
-                        <a href="#">
-                            <img src="../../static/images/2.jpg">
-                            <span style="bottom: 0px;right: 1px">101张</span>
-                        </a>
-
-                      </div>
-                      <div class="album-bottom">
-                          <a href="#">
-                              <span>啊啊啊啊</span>
-                          </a>
-                      </div>
-                    </div>
-                   </li>-->
                     <li th:each="ablbum : ${session.albums}">
                         <div class="album">
-                            <div class="album-top">
+                            <div class="album-top" style="position: relative">
                                 <a href="#">
                                     <img src="../../static/images/2.jpg">
-                                    <span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}"></span>
+                                    <span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}">1111</span>
                                 </a>
-
+                                <div class="album-edit" style="position: absolute;top: 2px;right: 3px">
+                                    <div class="dropdown">
+                                        <button class="dropbtn">菜单</button>
+                                        <div class="dropdown-content">
+                                            <a href="#">编辑</a>
+                                            <a href="#">删除</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="album-bottom">
                                 <a href="#">
-                                    <span th:text="${ablbum.getA_describe()}"></span>
+                                    <span th:text="${ablbum.getA_name()}">222</span>
                                 </a>
                             </div>
                         </div>
@@ -67,9 +60,51 @@
         </div>
     </div>
 
+
     <div th:replace="~{own/commes :: footbar}"></div>
 </div>
+
+
+
+<!--弹出框 -->
+<div id="addAlbumDiv" style="display: none;padding-top: 20px">
+    <form id="form1" class="layui-form" action="">
+        <div class="layui-form-item" style="display: none">
+            <label class="layui-form-label">所属用户id</label>
+            <div class="layui-input-block">
+                <input type="text" name="uid" th:value="${session.user.uid}" required readonly="readonly" placeholder="请输入标题" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="a_name" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限</label>
+            <div class="layui-input-block">
+                <input type="radio" name="a_authority" value="1" title="私有">
+                <input type="radio" name="a_authority" value="2" title="公开" checked>
+                <input type="radio" name="a_authority" value="3" title="好友可见">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea name="a_describe" placeholder="请输入内容（可选）" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+
+
+    </form>
+</div>
+
+
+
 <script src="../../static/layui/layui.js"></script>
+<script src="../../static/js/jquery-3.3.1.js"></script>
 <script>
     //JavaScript代码区域
     //一般直接写在一个js文件中
@@ -90,6 +125,73 @@
             elem: '#test1' //指定元素
         });
     });
+
+    //弹出层：创建相册
+    layui.use('layer', function(){ //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        //触发事件
+        var active = {
+            setTop: function(){
+                var that = this;
+                //多窗口模式，层叠置顶
+                layer.open({
+                    type: 1 //此处以iframe举例
+                    ,title: ['添加相册', 'font-size:18px;text-align:center;']
+                    ,area: ['700px', '360px'] //宽高
+                    ,shade: 0
+                    ,content: $('#addAlbumDiv')
+                    ,btn: ["确认", "取消"] //只是为了演示
+                    ,yes: function(index, layero){
+                        alert(JSON.stringify(getFormData($("#form1"))));
+                        $.ajax({
+                            type:"post",
+                            dataType:"json",
+                            url:"/album/addAlbum",
+                            data: JSON.stringify(getFormData($("#form1"))),//表单数据
+                            contentType:"application/json",
+                            success:function(result){
+                                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                window.location.reload()  //刷新页面
+                            },
+                            error:function () {
+                                alert("返回值错误");
+                                 window.location.reload()  //刷新页面
+                            }
+                        });
+
+                        $(that).click();
+                    }
+                });
+            }
+
+
+
+        };
+
+        $('.addBu').on('click', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+
+    });
+
+    //将form表单数据转为JSON格式。
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+
+
+
 </script>
 </body>
+
+
 </html>

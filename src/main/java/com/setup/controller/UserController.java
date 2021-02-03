@@ -116,9 +116,8 @@ public class UserController {
 
         session.setAttribute("user",user1);
 
-       // System.out.println(user1);
 
-        return "success";
+        return "{\"id\":0"+"}";
     }
 
     //更改头像
@@ -167,13 +166,7 @@ public class UserController {
         session.setAttribute("headName","/"+ filePath+fileName);
 
         //设置json格式的返回值，前端要求的
-        String str = "{\n" +
-                "  \"id\":0,\n" +
-                "  \"stuemail\": \"33@com\",\n" +
-                "  \"stuname\": \"xiaoming\" \n" +
-                "}";
-        //System.out.println(str);
-        return str;
+        return "{\"id\":0"+"}";
 
     }
 

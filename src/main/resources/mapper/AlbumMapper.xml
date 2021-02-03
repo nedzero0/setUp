@@ -6,8 +6,8 @@
 
     <!--创建相册-->
     <insert id="insertAlbum" parameterType="com.setup.entity.Album">
-        insert into album(uid,a_name,a_createTime,a_path)
-        values (#{uid},#{a_name},#{a_createTime},#{a_path})
+        insert into album(uid,a_name,a_createTime,a_describe,a_authority,a_path)
+        values (#{uid},#{a_name},#{a_createTime},#{a_describe},#{a_authority},#{a_path})
     </insert>
     <!--查找所有相册-->
     <select id="queryAlbum" resultType="com.setup.entity.Album">
