@@ -9,6 +9,8 @@ import java.util.List;
 public interface ImageService {
     //增：批量上传图片，即插入图片
     public int insertImages(List<Image> imageList);
+    //增：单个上传图片，即插入图片
+    public int insertImage(Image image);
     //查看该相册下的所有图片,状态码为1的
     public List<Image> queryImageByAid(int aid);
     //更新图片原信息,即图片名称和描述

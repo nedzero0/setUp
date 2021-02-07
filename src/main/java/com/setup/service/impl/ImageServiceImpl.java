@@ -19,6 +19,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public int insertImage(Image image) {
+        return imageMapper.insertImage(image);
+    }
+
+    @Override
     public List<Image> queryImageByAid(int aid) {
         return imageMapper.queryImageByAid(aid);
     }

@@ -18,4 +18,5 @@ public interface AlbumService {
     //更新相册信息
     public int updateAlbum(Album album);
 
+
 }

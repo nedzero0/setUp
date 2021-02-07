@@ -30,6 +30,9 @@
         ,a_authority = #{a_authority}
         ,a_theme = #{a_theme},location = #{location} where aid = #{aid}
     </update>
-
-
+    <!--查找一个相册-->
+   <!-- <select id="queryOneAlbum" resultType="com.setup.entity.Album">
+        select * from album where aid = #{aid};
+    </select>
+-->
 </mapper>

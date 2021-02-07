@@ -26,7 +26,7 @@
                     <li th:each="ablbum,ablbumStat : ${session.albums}">
                         <div class="album">
                             <div class="album-top" style="position: relative">
-                                <a th:href="@{'/album/queryAlbum?aid=' + ${ablbum.getAid()}}">
+                                <a th:href="@{'/album/queryAlbum?aid=' + ${ablbum.getAid()} + '&index=' + ${ablbumStat.index}}">
                                     <img src="../../static/images/2.jpg">
                                     <span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}">1111</span>
                                 </a>

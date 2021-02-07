@@ -23,6 +23,12 @@
          )
       </foreach>
    </insert>
+    <!--单个添加-->
+    <insert id="insertImage" parameterType="com.setup.entity.Image">
+       insert into image
+      (aid,i_name,i_size,i_time,i_uploadTime,i_path)
+      values (#{aid},#{i_name},#{i_size},#{i_time},#{i_uploadTime},#{i_path})
+    </insert>
 
    <!--查看该相册下的所有图片-->
   <select id="queryImageByAid" parameterType="int" resultType="com.setup.entity.Image">
