@@ -23,10 +23,10 @@
         <div class="albums">
             <div class="albums-1">
                 <ul style="float: left">
-                    <li th:each="ablbum : ${session.albums}">
+                    <li th:each="ablbum,ablbumStat : ${session.albums}">
                         <div class="album">
                             <div class="album-top" style="position: relative">
-                                <a href="#">
+                                <a th:href="@{'/album/queryAlbum?aid=' + ${ablbum.getAid()}}">
                                     <img src="../../static/images/2.jpg">
                                     <span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}">1111</span>
                                 </a>
@@ -34,8 +34,9 @@
                                     <div class="dropdown">
                                         <button class="dropbtn">菜单</button>
                                         <div class="dropdown-content">
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
+                                            <a href="#"><button  type="button"  th:name="${ablbumStat.index}" th:value="${ablbumStat.index}" data-method="updateTop" class="layui-btn layui-btn-normal updateBu">编辑相册</button></a>
+                                            <a href="#"><button  type="button" data-method="delTop" class="layui-btn layui-btn-normal delBu">删除相册</button></a>
+                                            <span th:text="${ablbumStat.index}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -46,18 +47,80 @@
                                 </a>
                             </div>
                         </div>
+                        <!--弹出框 修改-->
+                        <div class="updateAlbumDiv" style="display: none;padding-top: 20px">
+                            <form class="layui-form form2" action="">
+                                <div class="layui-form-item" style="display: none">
+                                    <label class="layui-form-label">相册id</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="aid" th:value="${ablbum.getAid()}" required readonly="readonly" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="display: none">
+                                    <label class="layui-form-label">相册使用用户id</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="uid" th:value="${ablbum.getUid()}" required readonly="readonly" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="a_name" th:value="${ablbum.getA_name()}" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">权限</label>
+                                    <div class="layui-input-block" th:if="${ablbum.getA_authority() eq 1}">
+                                        <input type="radio" name="a_authority" value="1" title="私有" checked>
+                                        <input type="radio" name="a_authority" value="2" title="公开">
+                                        <input type="radio" name="a_authority" value="3" title="好友可见">
+                                    </div>
+                                    <div class="layui-input-block" th:if="${ablbum.getA_authority() eq 2}">
+                                        <input type="radio" name="a_authority" value="1" title="私有">
+                                        <input type="radio" name="a_authority" value="2" title="公开" checked>
+                                        <input type="radio" name="a_authority" value="3" title="好友可见">
+                                    </div>
+                                    <div class="layui-input-block" th:if="${ablbum.getA_authority() eq 3}">
+                                        <input type="radio" name="a_authority" value="1" title="私有" >
+                                        <input type="radio" name="a_authority" value="2" title="公开">
+                                        <input type="radio" name="a_authority" value="3" title="好友可见" checked>
+                                    </div>
+
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">主题</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="a_theme" th:value="${ablbum.getA_theme()}" required  lay-verify="required" placeholder="请输入主题" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item layui-form-text">
+                                    <label class="layui-form-label">描述</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="a_describe" th:text="${ablbum.getA_describe()}" placeholder="请输入内容（可选）" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">地点</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="location" th:value="${ablbum.getLocation()}" required  lay-verify="required" placeholder="请输入主题" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+
+
+
                     </li>
                 </ul>
              </div>
          </div>
-
-
-        <div>
-
-        </div>
-        <div>
-
-        </div>
     </div>
 
 
@@ -66,7 +129,7 @@
 
 
 
-<!--弹出框 -->
+<!--弹出框 添加-->
 <div id="addAlbumDiv" style="display: none;padding-top: 20px">
     <form id="form1" class="layui-form" action="">
         <div class="layui-form-item" style="display: none">
@@ -95,8 +158,6 @@
                 <textarea name="a_describe" placeholder="请输入内容（可选）" class="layui-textarea"></textarea>
             </div>
         </div>
-
-
 
     </form>
 </div>
@@ -129,7 +190,7 @@
     //弹出层：创建相册
     layui.use('layer', function(){ //独立版的layer无需执行这一句
         var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
-
+        //弹出层：创建相册
         //触发事件
         var active = {
             setTop: function(){
@@ -164,17 +225,70 @@
                     }
                 });
             }
+            //编辑相册
+            ,updateTop: function(){
+                var that = this;
+                //获取按钮的value值
+                var i = $(this).val();
+               // alert(i);
+                layer.open({
+                    type: 1 //此处以iframe举例
+                    ,title: ['编辑相册', 'font-size:18px;text-align:center;']
+                    ,area: ['700px', '360px'] //宽高
+                    ,shade: 0
+                    ,content: $('.updateAlbumDiv').eq(i)
+                    ,btn: ["确认", "取消"] //只是为了演示
+                    ,yes: function(index, layero){
+                        alert(JSON.stringify(getFormData($(".form2").eq(i))));
+                        $.ajax({
+                            type:"post",
+                            dataType:"json",
+                            url:"/album/updateAlbum",
+                            data: JSON.stringify(getFormData($(".form2").eq(i))),//表单数据
+                            contentType:"application/json",
+                            success:function(result){
+                                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                window.location.reload()  //刷新页面
+                            },
+                            error:function () {
+                                alert("返回值错误");
+                                window.location.reload()  //刷新页面
+                            }
+                        });
+
+                        $(that).click();
+                    }
+                });
+
+            }//删除相册
+            ,delTop: function(){
 
 
 
+            }
         };
 
+        $('.updateBu').on('click', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+           // var i = $(this).val();
+        });
+
+      /*  $('.layui-btn').on('click', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });*/
         $('.addBu').on('click', function(){
             var othis = $(this), method = othis.data('method');
             active[method] ? active[method].call(this, othis) : '';
         });
 
+
     });
+
+
+
+
 
     //将form表单数据转为JSON格式。
     function getFormData($form) {

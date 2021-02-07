@@ -55,6 +55,7 @@ public class UserController {
             List<Album> albums = albumService.queryAlbum(user.getUid());
             session.setAttribute("user",user);
             session.setAttribute("albums",albums);
+            //System.out.println(albums);
           //添加头像路径  /  是浏览器默认路径
             session.setAttribute("headName","/"+user.getProfile_photo());
 

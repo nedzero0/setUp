@@ -27,7 +27,7 @@
     <!--更改相册信息-->
     <update id="updateAlbum">
         update album set a_name = #{a_name},a_describe = #{a_describe}
-        ,a_coverPath = #{a_coverPath},a_authority = #{a_authority}
+        ,a_authority = #{a_authority}
         ,a_theme = #{a_theme},location = #{location} where aid = #{aid}
     </update>
 

@@ -17,6 +17,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/register.html").setViewName("register");
         registry.addViewController("/own/personInfo.html");
         registry.addViewController("/own/changeHead.html");
+        registry.addViewController("/own/album.html");
     }
 
     //静态资源文件夹映射
