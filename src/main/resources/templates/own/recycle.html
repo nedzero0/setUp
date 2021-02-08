@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>相册信息- Layui</title>
+    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../../static/css/backstage.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{own/commes :: topbar}"></div>
+    <div th:replace="~{own/commes :: sidebar}"></div>
+    <div class="layui-body" style="padding-left: 20px">
+        <!-- 内容主体区域 -->
+        <div style="margin-top: 20px;margin-bottom: 30px">
+            <button type="button" onclick="reductionItems()" class="layui-btn layui-btn-normal">批量还原</button>
+        </div>
+
+        <div class="albums">
+            <div class="albums-1">
+                <ul style="float: left">
+                    <form id="listForm" th:action="@{/album/reductionItems(uid=${session.user.getUid()})}" method="post">
+                        <li th:each="image,imageStat : ${session.reImages}">
+                            <div class="album">
+                                <td><input type="checkbox" name="redIds" th:value="${image.getI_id()}"></td>
+                                <div class="album-top" style="position: relative">
+                                    <a href="#">
+                                        <img th:src=" '/' + ${image.getI_path()}">
+                                        <span style="bottom: 0px;right: 1px" >1111</span>
+                                    </a>
+                                    <div class="album-edit" style="position: absolute;top: 2px;right: 3px">
+                                        <div class="dropdown">
+                                            <button class="dropbtn">菜单</button>
+                                            <div class="dropdown-content">
+                                                <a href="#"><button  type="button"   data-method="updateTop" class="layui-btn layui-btn-normal updateBu">编辑相册</button></a>
+                                                <a href="#"><button  type="button" data-method="delTop" class="layui-btn layui-btn-normal delBu">删除图片</button></a>
+                                                <span>12</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="album-bottom">
+                                    <a href="#">
+                                        <span>222</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div th:replace="~{own/commes :: footbar}"></div>
+
+</div>
+
+
+<div id="addImagesDiv" class="layui-upload" style="display: none;padding: 20px 20px">
+    <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+    <div class="layui-upload-list">
+        <table class="layui-table">
+            <thead>
+            <tr>   <th>文件名</th>
+                <th>文件缩略图</th>
+                <th>大小</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr></thead>
+            <tbody id="demoList"></tbody>
+        </table>
+    </div>
+    <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+</div>
+
+<script src="../../static/layui/layui.js"></script>
+<script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    //批量删除
+    function reductionItems() {
+        //document.getElementById("listForm").onsubmit;
+        layer.confirm('确定要还原吗', function(index){
+            $("#listForm").submit();
+            layer.close(index);
+        });
+    }
+</script>
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+    });
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
+    });
+
+
+
+</script>
+</body>
+</html>

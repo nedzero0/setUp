@@ -15,14 +15,17 @@
         <!-- 内容主体区域 -->
         <div style="margin-top: 20px;margin-bottom: 30px">
             <button type="button" data-method="addImages" class="layui-btn layui-btn-normal addIma">上传照片/视频</button>
+            <button type="button" onclick="deleteItems()" class="layui-btn layui-btn-normal">批量删除</button>
 
         </div>
 
         <div class="albums">
             <div class="albums-1">
                 <ul style="float: left">
+                    <form id="listForm" th:action="@{/album/deleteItems(uid=${session.user.getUid()})}" method="post">
                     <li th:each="image,imageStat : ${session.images}">
                         <div class="album">
+                            <td><input type="checkbox" name="chkIds" th:value="${image.getI_id()}"></td>
                             <div class="album-top" style="position: relative">
                                 <a href="#">
                                     <img th:src=" '/' + ${image.getI_path()}">
@@ -33,7 +36,7 @@
                                         <button class="dropbtn">菜单</button>
                                         <div class="dropdown-content">
                                             <a href="#"><button  type="button"   data-method="updateTop" class="layui-btn layui-btn-normal updateBu">编辑相册</button></a>
-                                            <a href="#"><button  type="button" data-method="delTop" class="layui-btn layui-btn-normal delBu">删除相册</button></a>
+                                            <a href="#"><button  type="button" data-method="delTop" class="layui-btn layui-btn-normal delBu">删除图片</button></a>
                                             <span>12</span>
                                         </div>
                                     </div>
@@ -47,6 +50,7 @@
                         </div>
 
                     </li>
+                    </form>
                 </ul>
             </div>
         </div>
@@ -80,6 +84,16 @@
 
 <script src="../../static/layui/layui.js"></script>
 <script src="../../static/js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    //批量删除
+    function deleteItems() {
+        //document.getElementById("listForm").onsubmit;
+        layer.confirm('确定要删除吗', function(index){
+            $("#listForm").submit();
+            layer.close(index);
+        });
+    }
+</script>
 <script>
     //一般直接写在一个js文件中
     layui.use(['layer', 'form'], function(){
@@ -166,7 +180,7 @@
         var demoListView = $('#demoList')
             ,uploadListIns = upload.render({
             elem: '#testList'
-            ,url: 'http://localhost:8080/album/addImages' //改成您自己的上传接口
+            ,url: '/album/addImages' //改成您自己的上传接口
             ,accept: 'file'
             ,multiple: true
             ,auto: false

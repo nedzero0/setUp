@@ -32,10 +32,10 @@
                 <span th:text="${session.user.username}"></span>
             </a>
             <dl class="layui-nav-child">
-                <dd><a href="http://localhost:8080/own/changeHead.html">更换头像</a></dd>
+                <dd><a href="/own/changeHead.html">更换头像</a></dd>
             </dl>
         </li>
-        <li class="layui-nav-item"><a href="http://localhost:8080/login.html">退了</a></li>
+        <li class="layui-nav-item"><a href="/login.html">退了</a></li>
     </ul>
 </div>
 
@@ -45,12 +45,14 @@
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
         <ul class="layui-nav layui-nav-tree"  lay-filter="test">
             <li class="layui-nav-item layui-nav-itemed">
-                <a class="" href="http://localhost:8080/own/personInfo.html">个人信息</a>
+                <a class="" href="/own/personInfo.html">个人信息</a>
             </li>
             <li class="layui-nav-item">
-                <a href="http://localhost:8080/own/personal.html">我的相册</a>
+                <a href="/own/personal.html">我的相册</a>
             </li>
-            <li class="layui-nav-item"><a href="">云市场</a></li>
+            <li class="layui-nav-item">
+                <a href="/own/recycle.html">回收站</a>
+            </li>
             <li class="layui-nav-item"><a href="">发布商品</a></li>
         </ul>
     </div>

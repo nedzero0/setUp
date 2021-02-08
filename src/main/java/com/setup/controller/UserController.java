@@ -5,8 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.setup.entity.Album;
+import com.setup.entity.Image;
 import com.setup.entity.User;
 import com.setup.service.AlbumService;
+import com.setup.service.ImageService;
 import com.setup.service.UserService;
 import com.setup.utils.addAlbum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AlbumService albumService;
-
+    @Autowired
+    private ImageService imageService;
     //默认页面
     @RequestMapping("/index")
     public String success(){
@@ -53,9 +56,13 @@ public class UserController {
        // System.out.println(user);
         if (user!=null){
             List<Album> albums = albumService.queryAlbum(user.getUid());
+            //登录的时候加载 用户，相册，回收站信息   图片信息是查看相册的时候才加载
             session.setAttribute("user",user);
             session.setAttribute("albums",albums);
-            //System.out.println(albums);
+            //设置回收站的图片数据
+            List<Image> images = imageService.queryReImage(user.getUid());
+            session.setAttribute("reImages",images);
+
           //添加头像路径  /  是浏览器默认路径
             session.setAttribute("headName","/"+user.getProfile_photo());
 

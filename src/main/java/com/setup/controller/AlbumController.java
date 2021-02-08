@@ -18,9 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -91,7 +93,8 @@ public class AlbumController {
         List<Image> images = imageService.queryImageByAid(aid);
         //System.out.println(images.size()+"\n"+images);
         session.setAttribute("images",images);
-
+        //设置现在操作的相册newAid和该相册在list中的index下标
+        session.setAttribute("newAid",aid);
         session.setAttribute("index",index);
 
         return "redirect:/own/album.html";
@@ -163,5 +166,50 @@ public class AlbumController {
 
         return "{\"success\":1"+"}";
     }
+
+    //批量删除
+    @RequestMapping("/deleteItems")
+    public String deleteItems(String[] chkIds,HttpSession session,HttpServletRequest request){
+        System.out.println("开始批量删除");
+        String uid = request.getParameter("uid");
+        System.out.println("该用户id为"+uid);
+        int id = Integer.parseInt(uid);
+        if (chkIds!=null){
+            //删除
+            int i = imageService.recoveryImages(chkIds);
+            int newAid = (int)session.getAttribute("newAid");
+            if (i>0){
+                System.out.println("更新session 现在的相册id是"+newAid);
+                //更新相册下的图片session
+                List<Image> images = imageService.queryImageByAid(newAid);
+                session.setAttribute("images",images);
+                //更新回收站的session
+                List<Image> reImages = imageService.queryReImage(id);
+                session.setAttribute("reImages",reImages);
+
+            }
+        }
+        return "redirect:/own/album.html";
+    }
+
+    //批量还原
+    @RequestMapping("/reductionItems")
+    public String reductionItems(String[] redIds,HttpSession session,HttpServletRequest request){
+        System.out.println("开始批量还原");
+        String uid = request.getParameter("uid");
+        int id = Integer.parseInt(uid);
+        if (redIds!=null){
+            //还原
+            int i = imageService.updateRecoverys(redIds);
+            if (i>0){
+                //更新回收站的session
+                List<Image> reImages = imageService.queryReImage(id);
+                session.setAttribute("reImages",reImages);
+            }
+        }
+        return "redirect:/own/recycle.html";
+    }
+
+
 
 }

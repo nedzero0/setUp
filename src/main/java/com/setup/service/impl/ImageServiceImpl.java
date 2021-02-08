@@ -29,13 +29,29 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public List<Image> queryReImage(int uid) {
+        return imageMapper.queryReImage(uid);
+    }
+
+
+    @Override
     public int updateImage(String name, String describe, int i_id) {
         return imageMapper.updateImage(name,describe,i_id);
     }
 
+   /* @Override
+    public int recoverImages(List<String> list) {
+        return imageMapper.recoverImages(list);
+    }*/
+
     @Override
     public int recoveryImage(int i_id) {
         return imageMapper.recoveryImage(i_id);
+    }
+
+    @Override
+    public int recoveryImages(String[] str) {
+        return imageMapper.recoveryImages(str);
     }
 
     @Override
@@ -44,7 +60,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public int updateRecoverys(String[] str) {
+        return imageMapper.updateRecoverys(str);
+    }
+
+    @Override
     public int delImage(int i_id) {
         return imageMapper.delImage(i_id);
+    }
+
+    @Override
+    public int delImages(String[] str) {
+        return imageMapper.delImages(str);
     }
 }

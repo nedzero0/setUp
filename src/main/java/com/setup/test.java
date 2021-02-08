@@ -23,10 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 /*
 @Controller
 public class test {
@@ -50,13 +48,25 @@ public class test {
     @Autowired
     private ImageService imageService;
 
-
+    @Autowired
+    private ImageMapper imageMapper;
 
 
     @Test
     public void test() {
-        String str = "{\"id\":0"+"}";
-        System.out.println(str);
+
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        List<Integer> list2 = new ArrayList<>();
+        list2.add(1);
+        list2.add(2);
+
+        String[] str = {"1","2"};
+
+       imageMapper.recoveryImages(str);
+        // imageMapper.recoveryImage("2");
+
 
         //image测试
 

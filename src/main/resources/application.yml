@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: 182008
-    url: jdbc:mysql://127.0.0.1:3306/share album?&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/share album?&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
@@ -25,3 +25,5 @@ spring:
 #schema :
 #- classpath: department.sql
 
+server:
+  port: 8770
