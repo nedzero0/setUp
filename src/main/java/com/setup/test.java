@@ -50,21 +50,19 @@ public class test {
 
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private AlbumMapper albumMapper;
 
 
     @Test
     public void test() {
 
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        List<Integer> list2 = new ArrayList<>();
-        list2.add(1);
-        list2.add(2);
+        String aid ="aid=19";
+        System.out.println(aid.substring(4));
 
-        String[] str = {"1","2"};
+        System.out.println(albumMapper.queryOldAlbum("31"));
 
-       imageMapper.recoveryImages(str);
+
         // imageMapper.recoveryImage("2");
 
 

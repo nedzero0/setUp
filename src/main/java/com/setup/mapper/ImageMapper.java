@@ -17,6 +17,8 @@ public interface ImageMapper {
     public List<Image> queryImageByAid(int aid);
     //查看该用户(uid)回收站的图片,状态码为0的
     public List<Image> queryReImage(int uid);
+    //查看该用户回收站将要删除的图片的地址信息，
+    public List<String> queryAddress(String[] str);
 
     //更新图片原信息,即图片名称和描述
     public int updateImage(String name,String describe,int i_id);

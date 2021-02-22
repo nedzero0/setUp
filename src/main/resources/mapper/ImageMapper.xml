@@ -42,6 +42,14 @@ FROM image i INNER JOIN album a
 ON i.status = 0 AND i.aid = a.aid AND a.uid = #{uid}
   </select>
 
+    <!--查看该用户回收站将要彻底删除的图片的地址信息-->
+    <select id="queryAddress" resultType="java.lang.String">
+        SELECT i_path FROM image WHERE i_id IN
+        <foreach collection="array"  item="value" index="index" open="(" separator="," close=")">
+          #{value}
+        </foreach>
+    </select>
+
 
 <!--   更新图片原信息,即图片名称和描述-->
   <update id="updateImage">
@@ -69,7 +77,7 @@ ON i.status = 0 AND i.aid = a.aid AND a.uid = #{uid}
     <!--批量还原-->
     <update id="updateRecoverys">
         <foreach collection="array" open="" close=" " separator=";" item="value">
-            UPDATE image SET `status` = 1 WHERE i_id = #{value}
+         UPDATE image SET `status` = 1 WHERE i_id = #{value}
         </foreach>
     </update>
 

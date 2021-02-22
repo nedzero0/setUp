@@ -20,7 +20,7 @@ public class Album {
       private BigDecimal coordinate;//相册 经纬度
       private String location;//相册的地理位置
       private String a_path;//相册路径
-
+      private int a_status;//相册状态
 
     public Album() {
 
@@ -62,10 +62,17 @@ public class Album {
                 ", coordinate=" + coordinate +
                 ", location='" + location + '\'' +
                 ", a_path='" + a_path + '\'' +
+                ", a_status=" + a_status +
                 '}';
     }
 
+    public int getA_status() {
+        return a_status;
+    }
 
+    public void setA_status(int a_status) {
+        this.a_status = a_status;
+    }
 
     public int getAid() {
         return aid;

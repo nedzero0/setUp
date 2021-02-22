@@ -35,7 +35,7 @@
                                         <button class="dropbtn">菜单</button>
                                         <div class="dropdown-content">
                                             <a href="#"><button  type="button"  th:name="${ablbumStat.index}" th:value="${ablbumStat.index}" data-method="updateTop" class="layui-btn layui-btn-normal updateBu">编辑相册</button></a>
-                                            <a href="#"><button  type="button" data-method="delTop" class="layui-btn layui-btn-normal delBu">删除相册</button></a>
+                                            <a href="#"><button  type="button" th:value="${ablbum.getAid()}"  data-method="delTop" class="layui-btn layui-btn-normal delBu">删除相册</button></a>
                                             <span th:text="${ablbumStat.index}"></span>
                                         </div>
                                     </div>
@@ -187,7 +187,7 @@
         });
     });
 
-    //弹出层：创建相册
+    //弹出层
     layui.use('layer', function(){ //独立版的layer无需执行这一句
         var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
         //弹出层：创建相册
@@ -236,7 +236,7 @@
                     ,title: ['编辑相册', 'font-size:18px;text-align:center;']
                     ,area: ['700px', '360px'] //宽高
                     ,shade: 0
-                    ,content: $('.updateAlbumDiv').eq(i)
+                    ,content: $('.updateAlbumDiv').eq(i) //显示第i个的内容，在session中的第i个
                     ,btn: ["确认", "取消"] //只是为了演示
                     ,yes: function(index, layero){
                         alert(JSON.stringify(getFormData($(".form2").eq(i))));
@@ -260,13 +260,43 @@
                     }
                 });
 
-            }//删除相册
+            }
+            //删除相册
             ,delTop: function(){
+                var that = this;
+                //获取按钮的value值,即该相册的id值
+                var aid = $(this).val();
+                layer.confirm('确定要删除吗', function(index){
+                    $.ajax({
+                        type:"post",
+                        dataType:"json",
+                        url:"/album/deleteAlbum",
+                        data: {aid:aid},//相册id,data格式要用json,所以我们这里直接写
+                        contentType:"application/json",
+                        success:function(result){
+                            layer.close(index); //如果设定了yes回调，需进行手工关闭
+                            window.location.reload()  //刷新页面
+                        },
+                        error:function () {
+                            alert("返回值错误");
+                            window.location.reload()  //刷新页面
+                        }
+                    });
 
+                    layer.close(index);
+                });
 
 
             }
         };
+
+
+        //设置点击事件
+        $('.delBu').on('click', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+            // var i = $(this).val();
+        });
 
         $('.updateBu').on('click', function(){
             var othis = $(this), method = othis.data('method');

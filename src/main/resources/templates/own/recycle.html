@@ -15,6 +15,7 @@
         <!-- 内容主体区域 -->
         <div style="margin-top: 20px;margin-bottom: 30px">
             <button type="button" onclick="reductionItems()" class="layui-btn layui-btn-normal">批量还原</button>
+            <button type="button" onclick="deleteItems()" class="layui-btn layui-btn-normal">彻底删除</button>
         </div>
 
         <div class="albums">
@@ -83,10 +84,19 @@
 <script src="../../static/layui/layui.js"></script>
 <script src="../../static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
-    //批量删除
+    //批量还原
     function reductionItems() {
         //document.getElementById("listForm").onsubmit;
         layer.confirm('确定要还原吗', function(index){
+            $("#listForm").submit();
+            layer.close(index);
+        });
+    }
+    //彻底删除（批量）
+    function deleteItems() {
+        //document.getElementById("listForm").onsubmit;
+        layer.confirm('确定要彻底删除吗', function(index){
+            $("#listForm").attr('action', "/album/delForRe");    //通过jquery为action属性赋值
             $("#listForm").submit();
             layer.close(index);
         });

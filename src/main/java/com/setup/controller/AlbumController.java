@@ -82,6 +82,25 @@ public class AlbumController {
         return "{\"id\":0"+"}";
     }
 
+    //删除相册和相册下的图片
+    @RequestMapping("/deleteAlbum")
+    @ResponseBody
+    public String deleteAlbum(HttpSession session, @RequestBody String aid){
+        System.out.println("要删除的相册id是"+aid);
+        //删除相册，假删除  更新相册和其下图片的状态码为0
+        System.out.println(aid.substring(4));
+        int i = albumService.deAlbum(Integer.parseInt(aid.substring(4)));
+        User user = (User)session.getAttribute("user");
+        //更新相册的session
+        List<Album> albums = albumService.queryAlbum(user.getUid());
+        session.setAttribute("albums",albums);
+        //更新回收站的图片session
+        List<Image> reImages = imageService.queryReImage(user.getUid());
+        session.setAttribute("reImages",reImages);
+        return "{\"id\":0"+"}";
+    }
+
+
 
     //查看相册下的图片
     @RequestMapping("/queryAlbum")
@@ -167,7 +186,7 @@ public class AlbumController {
         return "{\"success\":1"+"}";
     }
 
-    //批量删除
+    //批量删除图片,到回收站
     @RequestMapping("/deleteItems")
     public String deleteItems(String[] chkIds,HttpSession session,HttpServletRequest request){
         System.out.println("开始批量删除");
@@ -192,14 +211,23 @@ public class AlbumController {
         return "redirect:/own/album.html";
     }
 
-    //批量还原
+    //批量还原到相册
     @RequestMapping("/reductionItems")
     public String reductionItems(String[] redIds,HttpSession session,HttpServletRequest request){
         System.out.println("开始批量还原");
         String uid = request.getParameter("uid");
         int id = Integer.parseInt(uid);
         if (redIds!=null){
-            //还原
+            //要判断原相册状态是否为1
+            Album album = albumService.queryOldAlbum(redIds[0]);
+            if (album.getA_status()==0){
+                //还原相册状态为1
+               albumService.updateStatus(album.getAid());
+                //更新相册的session
+                List<Album> albums = albumService.queryAlbum(album.getUid());
+                session.setAttribute("albums",albums);
+            }
+            //还原到相册
             int i = imageService.updateRecoverys(redIds);
             if (i>0){
                 //更新回收站的session
@@ -210,6 +238,38 @@ public class AlbumController {
         return "redirect:/own/recycle.html";
     }
 
+    //彻底删除图片，从回收站中
+    @RequestMapping("/delForRe")
+    public String delForRe(String[] redIds,HttpSession session,HttpServletRequest request){
+        System.out.println("彻底删除");
+        //System.out.println(Arrays.toString(redIds));
+        User user = (User)session.getAttribute("user");
+        if (redIds!=null){
+
+            //删除文件夹中的
+            //获得要删除的文件的位置信息
+            List<String> list =  imageService.queryAddress(redIds);
+            System.out.println(list);
+            if (list!=null){
+                //循环删除
+                for (String str:list) {
+                    File file = new File("D://"+str);
+                    file.delete();
+                 }
+            }
+
+            //删除数据库中的
+            int i = imageService.delImages(redIds);
+
+            if (i>0){
+                //更新回收站的session
+                List<Image> reImages = imageService.queryReImage(user.getUid());
+                session.setAttribute("reImages",reImages);
+            }
+        }
+
+        return "redirect:/own/recycle.html";
+    }
 
 
 }

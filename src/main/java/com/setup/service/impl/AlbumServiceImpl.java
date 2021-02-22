@@ -25,6 +25,11 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
+    public int deAlbum(int aid) {
+        return albumMapper.deAlbum(aid);
+    }
+
+    @Override
     public int delAlbum(int aid) {
         return albumMapper.delAlbum(aid);
     }
@@ -37,5 +42,15 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public int updateAlbum(Album album) {
         return albumMapper.updateAlbum(album);
+    }
+
+    @Override
+    public Album queryOldAlbum(String i_id) {
+        return albumMapper.queryOldAlbum(i_id);
+    }
+
+    @Override
+    public int updateStatus(int aid) {
+        return albumMapper.updateStatus(aid);
     }
 }

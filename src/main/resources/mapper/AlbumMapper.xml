@@ -9,12 +9,19 @@
         insert into album(uid,a_name,a_createTime,a_describe,a_authority,a_path)
         values (#{uid},#{a_name},#{a_createTime},#{a_describe},#{a_authority},#{a_path})
     </insert>
-    <!--查找所有相册-->
+    <!--查找所有相册，状态为1的-->
     <select id="queryAlbum" resultType="com.setup.entity.Album">
-        select * from album where uid = #{uid};
+        select * from album where a_status = 1 and uid = #{uid};
     </select>
 
-    <!--删除相册-->
+    <!--删除相册，假删除  更新相册和其下图片的状态码-->
+    <update id="deAlbum">
+       UPDATE album a JOIN image i ON a.aid = i.aid
+SET a.a_status = 0,i.`status`=0
+WHERE a.aid = #{aid}
+    </update>
+
+    <!--彻底删除相册-->
     <delete id="delAlbum" parameterType="int">
         DELETE FROM album WHERE aid = #{aid}
     </delete>
@@ -35,4 +42,17 @@
         select * from album where aid = #{aid};
     </select>
 -->
+
+    <!--查看原相册的状态是否为1,根据图片的i_id-->
+    <select id="queryOldAlbum" resultType="com.setup.entity.Album">
+       select *from album where aid = (
+SELECT aid FROM image WHERE i_id = #{i_id}
+)
+    </select>
+
+    <!--还原相册状态为1-->
+    <update id="updateStatus">
+      update album set a_status= 1 where aid = #{aid}
+    </update>
+
 </mapper>

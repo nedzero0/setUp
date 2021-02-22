@@ -33,6 +33,11 @@ public class ImageServiceImpl implements ImageService {
         return imageMapper.queryReImage(uid);
     }
 
+    @Override
+    public List<String> queryAddress(String[] str) {
+        return imageMapper.queryAddress(str);
+    }
+
 
     @Override
     public int updateImage(String name, String describe, int i_id) {
