@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推荐的相册界面</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../static/css/backstage.css">
+    <link rel="stylesheet" type="text/css" href="../static/search/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="../static/search/css/default.css">
+    <link rel="stylesheet" type="text/css" href="../static/search/css/search-form.css">
+    <link rel="stylesheet" href="../static/css/search.css">
+    <link rel="stylesheet" href="../static/css/pgwslideshow.css">
+    <link rel="stylesheet" href="../static/css/ablum.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/pgwslideshow.js"></script>
+</head>
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">layui 管理布局</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+</div>
+
+
+<div>
+    <div class="cc_left">
+
+        <ul class="pgwSlideshow">
+            <li><img src="../static/images/san-francisco.jpg" alt="San Francisco, USA" data-description="Golden Gate Bridge"></li>
+            <li><img src="../static/images/2.jpg" alt="Rio de Janeiro, Brazil"></li>
+            <li><img src="../static/images/london.jpg" alt=""></li>
+            <li><img src="../static/images/new-york.jpg" alt=""></li>
+            <li><img src="../static/images/new-delhi.jpg" alt=""></li>
+            <li><img src="../static/images/paris.jpg" alt=""></li>
+            <li><img src="../static/images/sydney.jpg" alt=""></li>
+            <li><img src="../static/images/tokyo.jpg" alt=""></li>
+            <li><img src="../static/images/honk-kong.jpg" alt=""></li>
+            <li><img src="../static/images/dakar.jpg" alt=""></li>
+            <li><img src="../static/images/toronto.jpg" alt=""></li>
+            <li>
+                <a href="http://en.wikipedia.org/wiki/Monaco" target="_blank">
+                    <img src="../static/images/monaco.jpg" alt="Monaco">
+                </a>
+            </li>
+        </ul>
+
+    </div>
+    <div class="cc_right">
+        <!--头部，有用户的头像信息和名称等-->
+       <div class="cc_user_item" style="margin-left: 30px;position: relative">
+           <span>
+                   <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    <span>信息</span>
+                </a>
+           </span>
+           <div style="position: absolute;right: 10px;top: 5px;padding: 5px 10px;border: 2px solid seashell">关注</div>
+       </div>
+    </div>
+
+</div>
+
+
+<script src="../static/layui/layui.js" charset="utf-8"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+</script>
+
+<script>
+    layui.use(['carousel', 'form'], function() {
+        var carousel = layui.carousel
+            , form = layui.form;
+
+
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            ,width: '778px'
+            ,height: '440px'
+            ,interval: 5000
+        });
+
+        //事件
+        carousel.on('change(test4)', function(res){
+            console.log(res)
+        });
+
+        var $ = layui.$, active = {
+            set: function(othis){
+                var THIS = 'layui-bg-normal'
+                    ,key = othis.data('key')
+                    ,options = {};
+
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+
+        //监听开关
+        form.on('switch(autoplay)', function(){
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+
+        $('.demoSet').on('keyup', function(){
+            var value = this.value
+                ,options = {};
+            if(!/^\d+$/.test(value)) return;
+
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.pgwSlideshow').pgwSlideshow({
+            transitionEffect:'fading'
+        });
+    });
+</script>
+
+</body>
+</html>

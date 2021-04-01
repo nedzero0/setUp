@@ -1,0 +1,16 @@
+.cc_left{
+    position: absolute;
+    width: 75%;
+    height: 100%;
+    left: 0;
+    background-color: #00FFFF;
+}
+
+
+.cc_right{
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    right: 0;
+    background-color: #00FF00;
+}
