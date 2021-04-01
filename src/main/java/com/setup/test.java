@@ -5,6 +5,7 @@ import com.setup.entity.Image;
 import com.setup.entity.User;
 import com.setup.mapper.AlbumMapper;
 import com.setup.mapper.ImageMapper;
+import com.setup.mapper.RecommendMapper;
 import com.setup.mapper.UserMapper;
 import com.setup.service.ImageService;
 import com.setup.service.UserService;
@@ -52,16 +53,21 @@ public class test {
     private ImageMapper imageMapper;
     @Autowired
     private AlbumMapper albumMapper;
+    @Autowired
+    private RecommendMapper recommendMapper;
 
 
     @Test
     public void test() {
+        System.out.println("eee");
+        List<Album> list = recommendMapper.queryCommAlbum(0,2);
+        System.out.println(list);
 
-        String aid ="aid=19";
+      /*  String aid ="aid=19";
         System.out.println(aid.substring(4));
 
         System.out.println(albumMapper.queryOldAlbum("31"));
-
+*/
 
         // imageMapper.recoveryImage("2");
 
