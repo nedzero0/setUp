@@ -3,14 +3,68 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--上面的是映射文件头-->
 <mapper namespace="com.setup.mapper.RecommendMapper">
-
+    <!--1.推荐界面推荐的相册,这是分页查询-->
     <select id="queryCommAlbum" resultType="com.setup.entity.Album">
       select *
 from album
 where a_status = 1 and a_authority = 2
 LIMIT #{start},#{count}
     </select>
+    <select id="queryCountAlbum" resultType="java.lang.Integer">
+ select COUNT(aid)
+from album
+where a_status = 1 AND a_authority = 2
+    </select>
 
+   <!-- //2.根据主题的分页查询-->
+    <select id="queryByTag" resultType="com.setup.entity.Album">
+ select *
+from album
+where a_status = 1 AND a_authority = 2 AND  a_theme = #{tag}
+LIMIT #{start},#{count}
+    </select>
+    <select id="queryCount" resultType="java.lang.Integer">
+ select COUNT(aid)
+from album
+where a_status = 1 AND a_authority = 2 AND  a_theme = #{tag}
+
+    </select>
+
+
+
+    <!--//3.根据搜索框的字段查询 相应的相册名称有关的-->
+    <select id="queryByName" resultType="com.setup.entity.Album">
+select *
+from album
+where a_status = 1 AND a_authority = 2 AND  a_name LIKE "%"#{name}"%"
+LIMIT #{start},#{count}
+
+    </select>
+
+  <!--  //4.根据搜索框的字段查询  用户-->
+    <select id="queryByUserName" resultType="com.setup.entity.User">
+select *
+from `user`
+WHERE username LIKE "%"#{userName}"%"
+LIMIT #{start},#{count}
+
+    </select>
+
+
+    <!--  //5.根据推荐界面传来的相册 id 查询相册的所有信息-->
+    <select id="queryByAmID" resultType="com.setup.entity.Album">
+select *
+from album
+WHERE aid = #{albumId}
+    </select>
+
+
+    <!--  //6.根据相册id 查找主人的信息-->
+    <select id="queryOwnUser" resultType="com.setup.entity.User">
+select *
+from user
+WHERE uid = #{uId}
+    </select>
 
 
 </mapper>

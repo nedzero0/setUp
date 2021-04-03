@@ -78,16 +78,19 @@
         <div class="nav">
             <ul>
                 <li>
-                    <a href="#"> 全部</a>
+                    <a href="http://localhost:8770/recomm/queryTag?tag=全部&start=1"> 全部</a>
                 </li>
                 <li>
-                    <a href="#"> 全部</a>
-                </li>  <li>
-                <a href="#"> 全部</a>
-            </li>  <li>
-                <a href="#"> 全部</a>
-            </li>  <li>
-                <a href="#"> 全部</a>
+                    <a href="http://localhost:8770/recomm/queryTag?tag=风景&start=1">风景</a>
+                </li>
+                <li>
+                <a href="http://localhost:8770/recomm/queryTag?tag=旅游&start=1"> 旅游</a>
+                </li>
+                <li>
+                <a href="http://localhost:8770/recomm/queryTag?tag=生活&start=1"> 生活</a>
+            </li>
+                <li>
+                <a href="http://localhost:8770/recomm/queryTag?tag=情侣&start=1"> 情侣</a>
             </li>
 
             </ul>
@@ -95,114 +98,64 @@
 
         <div class="divAdmain">
             <ul>
-                <li class="admin">
+                <li class="admin" th:each="albums,albumsStat : ${session.re_albums}">
                     <div class="admin_div1">
                         <a href="#">
                            <img src="../static/images/2.jpg" style="overflow: hidden">
                         </a>
+                        <span th:text="${albums.getA_name()}"></span>
                     </div>
                 </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-                <li class="admin">
-                    <div class="admin_div1">
-                        <a href="#">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
-                        </a>
-                    </div>
-                </li>
-
 
             </ul>
 
 
         </div>
 
-
+       <!-- 底部分页-->
         <div class="bottom_page">
-            <div id="demo7"></div>
+          <!--  <div id="demo7"></div>-->
+            <!--当前页码等于1-->
+            <li th:if="${session.page.current} eq 1">
+                <a th:href="@{${session.page.path}+''+${session.page.current}}">上一页</a>
+            </li>
+            <!--当前页码大于1-->
+            <li th:if="${session.page.current} gt 1">
+                <a th:href="@{${session.page.path}+''+${session.page.current - 1}}">上一页</a>
+            </li>
+
+         <!--当前页码小于 总页码-->
+            <li th:if="${session.page.current} eq ${session.page.rows}">
+                <a th:href="@{${session.page.path}+''+${session.page.current}}">下一页</a>
+            </li>
+            <!--当前页码等于总页码-->
+            <li th:if="${session.page.current} lt ${session.page.rows}">
+                <a th:href="@{${session.page.path}+''+${session.page.current +1}}">下一页</a>
+            </li>
+
+
+           <span>
+
+           <form action="http://localhost:8770/recomm/queryTag">
+               <input type="text" name="tag" th:value="${session.tag}" style="display: none">
+                  <input type="text" name="start"/>
+               <input type="submit" value="跳转">
+           </form>
+
+
+
+           </span>
+
+
         </div>
-
-
-
-
-
-
-
 
     </div>
 
 
 </div>
 <script src="../static/layui/layui.js"></script>
+
+
 <script>
     //JavaScript代码区域
     layui.use('element', function(){
@@ -216,10 +169,10 @@
             var laypage = layui.laypage
                 , layer = layui.layer;
 
-        //完整功能
+        //完整功能,分页查询的
         laypage.render({
             elem: 'demo7'
-            ,count: 100
+            ,count: 500
             ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
             ,jump: function(obj){
                 console.log(obj)

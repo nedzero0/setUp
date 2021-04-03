@@ -59,14 +59,16 @@ public class test {
 
     @Test
     public void test() {
-        System.out.println("eee");
-        List<Album> list = recommendMapper.queryCommAlbum(0,2);
+
+        Album list = recommendMapper.queryByAmID(2);
+        User user  = recommendMapper.queryOwnUser(list.getUid());
         System.out.println(list);
+        System.out.println(user);
 
       /*  String aid ="aid=19";
         System.out.println(aid.substring(4));
 
-        System.out.println(albumMapper.queryOldAlbum("31"));
+        System.out.println(albumMap per.queryOldAlbum("31"));
 */
 
         // imageMapper.recoveryImage("2");
