@@ -11,6 +11,16 @@ public class Page {
     private int count;
     // 查询路径(用于复用分页链接)
     private String path;
+    //当前主题
+    private String tag;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public int getCurrent() {
         return current;
