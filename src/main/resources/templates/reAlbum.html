@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">>
 <head>
     <meta charset="UTF-8">
     <title>推荐的相册界面</title>
@@ -53,9 +53,11 @@
 
 <div>
     <div class="cc_left">
+       <div class="cc_leftTop">
+
 
         <ul class="pgwSlideshow">
-            <li><img src="../static/images/san-francisco.jpg" alt="San Francisco, USA" data-description="Golden Gate Bridge"></li>
+            <!--<li><img src="../static/images/san-francisco.jpg" alt="San Francisco, USA" data-description="Golden Gate Bridge"></li>
             <li><img src="../static/images/2.jpg" alt="Rio de Janeiro, Brazil"></li>
             <li><img src="../static/images/london.jpg" alt=""></li>
             <li><img src="../static/images/new-york.jpg" alt=""></li>
@@ -65,15 +67,26 @@
             <li><img src="../static/images/tokyo.jpg" alt=""></li>
             <li><img src="../static/images/honk-kong.jpg" alt=""></li>
             <li><img src="../static/images/dakar.jpg" alt=""></li>
-            <li><img src="../static/images/toronto.jpg" alt=""></li>
+            <li><img src="../static/images/toronto.jpg" alt=""></li>-->
+
+            <li th:each="image,imageStat : ${session.currentImages}">
+                <img th:src="'/' + ${image.getI_path()}" alt="">
+            </li>
+
             <li>
                 <a href="http://en.wikipedia.org/wiki/Monaco" target="_blank">
                     <img src="../static/images/monaco.jpg" alt="Monaco">
                 </a>
             </li>
         </ul>
+       </div>
+
+        <div class="cc_leftBM" style="width: 100%;height: 600px;background-color: hotpink">
+12
+        </div>
 
     </div>
+
     <div class="cc_right">
         <!--头部，有用户的头像信息和名称信息-->
        <div class="cc_user_item">
@@ -87,12 +100,13 @@
        </div>
 
         <div class="cc_infobox">
-            <p>相册名称</p>
-             <p>相册描述：顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶</p>
+            <p th:text="${session.currentAlbum.getA_name()}">相册名称</p>
+            <p>相册描述：<span th:text="${session.currentAlbum.getA_describe()}"></span></p>
             <p style="margin-top: 20px;font-size: 12px">
-                <span>创建日期：2020-01-12</span>
-                <span>浏览人数:1205</span>
-                <span>主题:风景</span>
+                <span>创建日期：</span>
+                <span th:text="${session.currentAlbum.getA_createTime()}">2020-01-12</span>
+                <span>浏览人数:<span th:text="${session.currentAlbum.getA_views()}"></span></span>
+                <span>主题:<span th:text="${session.currentAlbum.getA_theme()}"></span></span>
             </p>
 
             <div style="margin-top: 10px">
@@ -119,61 +133,14 @@
     });
 </script>
 
-<script>
-    layui.use(['carousel', 'form'], function() {
-        var carousel = layui.carousel
-            , form = layui.form;
 
-
-        //图片轮播
-        carousel.render({
-            elem: '#test10'
-            ,width: '778px'
-            ,height: '440px'
-            ,interval: 5000
-        });
-
-        //事件
-        carousel.on('change(test4)', function(res){
-            console.log(res)
-        });
-
-        var $ = layui.$, active = {
-            set: function(othis){
-                var THIS = 'layui-bg-normal'
-                    ,key = othis.data('key')
-                    ,options = {};
-
-                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
-                options[key] = othis.data('value');
-                ins3.reload(options);
-            }
-        };
-
-        //监听开关
-        form.on('switch(autoplay)', function(){
-            ins3.reload({
-                autoplay: this.checked
-            });
-        });
-
-        $('.demoSet').on('keyup', function(){
-            var value = this.value
-                ,options = {};
-            if(!/^\d+$/.test(value)) return;
-
-            options[this.name] = value;
-            ins3.reload(options);
-        });
-
-    });
-</script>
 
 <script type="text/javascript">
     $(document).ready(function() {
         $('.pgwSlideshow').pgwSlideshow({
-            transitionEffect:'fading'
+            transitionEffect:'fading',
         });
+
     });
 </script>
 

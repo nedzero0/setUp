@@ -20,12 +20,16 @@ public interface RecommendMapper {
 
     //3.根据搜索框的字段查询 相应的相册名称有关的
     public List<Album> queryByName(String name,int start,int count);
+    //查询总数
+    public Integer queryCountByName(String name);
+
     //4.根据搜索框的字段查询  用户
     public List<User> queryByUserName(String userName,int start,int count);
 
 
-    //5.根据推荐界面传来的相册 id 查询相册的所有信息
+    //5.根据推荐界面传来的相册 aid 查询相册的所有信息
     public Album queryByAmID(int albumId);
+
     //6.查出相册信息后根据相册的uid 查找主人的信息
     public User queryOwnUser(int uId);
 

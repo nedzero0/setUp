@@ -60,10 +60,12 @@ public class test {
     @Test
     public void test() {
 
-        Album list = recommendMapper.queryByAmID(2);
+        System.out.println(2/3);
+
+      /*  Album list = recommendMapper.queryByAmID(2);
         User user  = recommendMapper.queryOwnUser(list.getUid());
         System.out.println(list);
-        System.out.println(user);
+        System.out.println(user);*/
 
       /*  String aid ="aid=19";
         System.out.println(aid.substring(4));

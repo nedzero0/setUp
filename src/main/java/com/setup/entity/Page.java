@@ -11,15 +11,15 @@ public class Page {
     private int count;
     // 查询路径(用于复用分页链接)
     private String path;
-    //当前主题
-    private String tag;
+    //当前
+    private String name;
 
-    public String getTag() {
-        return tag;
+    public String getName() {
+        return name;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCurrent() {
@@ -60,5 +60,17 @@ public class Page {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "current=" + current +
+                ", limit=" + limit +
+                ", rows=" + rows +
+                ", count=" + count +
+                ", path='" + path + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
