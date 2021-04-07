@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>推荐的相册界面</title>
@@ -14,6 +14,7 @@
     <script src="../static/js/jquery.min.js"></script>
     <script src="../static/js/pgwslideshow.js"></script>
 </head>
+
 <body class="layui-layout-body">
 
 <div class="layui-layout layui-layout-admin">
@@ -92,8 +93,9 @@
        <div class="cc_user_item">
            <span>
                    <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    <span>信息</span>
+                    <img th:src="'/' + ${session.otherUser.getProfile_photo()}" class="layui-nav-img">
+                    <span th:text="${session.otherUser.getUsername()}" >姓名</span>
+                       <p th:text="${session.otherUser.getAutograph()}">个性签名</p>
                 </a>
            </span>
            <button>关注</button>

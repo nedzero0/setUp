@@ -60,7 +60,8 @@ public class test {
     @Test
     public void test() {
 
-        System.out.println(2/3);
+        User user = userService.queryOther(2);
+        System.out.println(user);
 
       /*  Album list = recommendMapper.queryByAmID(2);
         User user  = recommendMapper.queryOwnUser(list.getUid());

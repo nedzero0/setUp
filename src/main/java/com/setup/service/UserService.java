@@ -15,5 +15,7 @@ public interface UserService {
     public int updateHead(String path,String phone);
     //看是否电话已经被注册
 
+    //根据用户id查询其它用户信息(除了密码外)
+    public User queryOther(int uid);
 
 }

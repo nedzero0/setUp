@@ -42,4 +42,12 @@
     </select>
 
 
+   <!-- //根据用户id查询其它用户信息(除了密码外)-->
+    <select id="queryOther" resultType="com.setup.entity.User">
+        select uid,username,profile_photo,birthday,age,sex,address,autograph FROM `user`
+WHERE uid = #{uid}
+
+    </select>
+
+
 </mapper>

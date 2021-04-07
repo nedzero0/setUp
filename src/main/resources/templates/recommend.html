@@ -105,7 +105,7 @@
             <ul>
                 <li class="admin" th:each="albums,albumsStat : ${session.re_albums}">
                     <div class="admin_div1">
-                        <a th:href="@{/recomm/queryByAmID(aid=${albums.getAid()})}">
+                        <a th:href="@{/recomm/queryByAmID(aid=${albums.getAid()})}" target="_blank">
                            <img src="../static/images/2.jpg" style="overflow: hidden">
                         </a>
                         <span th:text="${albums.getA_name()}"></span>
@@ -119,6 +119,7 @@
 
        <!-- 底部分页-->
         <div class="bottom_page">
+            <span th:text="'共'+${session.page.rows}+'页'" style="color: #00FFFF">100</span>
           <!--  <div id="demo7"></div>-->
             <!--当前页码等于1-->
             <li th:if="${session.page.current} eq 1">

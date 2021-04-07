@@ -28,6 +28,8 @@ public interface UserMapper{
     //更改用户头像，根据电话更新
     public int updateHead(String path,String phone);
 
+    //根据用户id查询其它用户信息(除了密码外)
+    public User queryOther(int uid);
 
 
 }

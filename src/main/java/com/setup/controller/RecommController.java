@@ -3,8 +3,10 @@ package com.setup.controller;
 import com.setup.entity.Album;
 import com.setup.entity.Image;
 import com.setup.entity.Page;
+import com.setup.entity.User;
 import com.setup.mapper.RecommendMapper;
 import com.setup.service.ImageService;
+import com.setup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ public class RecommController {
     private RecommendMapper recommendMapper;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private UserService userService;
 
     Page page = new Page();
     List<Album> albums;
@@ -36,10 +40,11 @@ public class RecommController {
 
     //根据标签进来的
     @RequestMapping(value = "/queryTag",method = RequestMethod.GET)
-    public String queryTag(HttpSession session,@RequestParam String name,int start) {
+    public String queryTag(HttpSession session,String name,Integer start) {
         System.out.println(name);
+        if (start==null) start = 1;
 
-        if ("全部".equals(name)){  //如果是全部，即查询全部
+        if ("全部".equals(name) || name==null){  //如果是全部，即查询全部
             albums = recommendMapper.queryCommAlbum((start-1)*page.getLimit(), page.getLimit());
             //session.setAttribute("re_albums",albums);
             //数据总数
@@ -95,6 +100,9 @@ public class RecommController {
         List<Image> list = imageService.queryImageByAid(aid);
         System.out.println(list);
         session.setAttribute("currentImages",list);
+        //用户信息
+        User user = userService.queryOther(album.getUid());
+        session.setAttribute("otherUser",user);
 
 
         return "reAlbum";
