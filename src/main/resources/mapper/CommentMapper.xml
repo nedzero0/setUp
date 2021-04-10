@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--上面的是映射文件头-->
+
+<mapper namespace="com.setup.mapper.CommentMapper">
+    <select id="queryComment" resultType="com.setup.entity.Comment">
+       SELECT  c.*,u.username,u.profile_photo
+FROM `comment` AS c,`user` AS u
+WHERE aid = #{aid}
+AND c.uid = u.uid
+    </select>
+
+    <insert id="insertComment" parameterType="com.setup.entity.Comment">
+INSERT INTO `comment`(uid,aid,c_time,c_content)
+VALUES (#{uid},#{aid},#{c_time},#{c_content})
+
+    </insert>
+
+</mapper>

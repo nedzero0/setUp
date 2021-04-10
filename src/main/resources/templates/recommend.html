@@ -13,9 +13,9 @@
 <body class="layui-layout-body">
 
 <div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
+   <!-- <div class="layui-header">
         <div class="layui-logo">layui 管理布局</div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
+        &lt;!&ndash; 头部区域（可配合layui已有的水平导航） &ndash;&gt;
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="">控制台</a></li>
             <li class="layui-nav-item"><a href="">商品管理</a></li>
@@ -42,7 +42,9 @@
             </li>
             <li class="layui-nav-item"><a href="">退了</a></li>
         </ul>
-    </div>
+    </div>-->
+
+    <div th:replace="~{own/commes :: topbar}"></div>
 
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
@@ -79,7 +81,7 @@
             </form>
         </section>
 
-
+       <!--  相册标签和主体-->
         <div class="nav">
             <ul>
                 <li>

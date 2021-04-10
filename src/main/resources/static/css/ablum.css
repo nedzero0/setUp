@@ -4,7 +4,7 @@
     height: 100%;
     left: 0;
     background-color: #00FFFF;
-    overflow:auto
+    overflow:auto;
 }
 
 
@@ -14,6 +14,7 @@
     height: 100%;
     right: 0;
     background-color: #00FF00;
+    overflow: hidden auto;
 }
 .cc_user_item{
     margin-left: 30px;
@@ -34,4 +35,23 @@
     margin-top: 20px;
     background-color: #00FFFF;
 
+}
+.cc_comment__textarea textarea{
+    display: block;
+    padding: 10px 13px;
+    width: 100%;
+    background: #2B2B2B;
+    border-radius: 4px;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.cc_div:after{
+    content:"";
+    display: block;
+    clear: both;
+
+}
+.cc_comments{
+    padding-bottom: 60px;
 }

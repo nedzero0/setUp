@@ -18,9 +18,10 @@
 <body class="layui-layout-body">
 
 <div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
+
+    <!--<div class="layui-header">
         <div class="layui-logo">layui 管理布局</div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
+        &lt;!&ndash; 头部区域（可配合layui已有的水平导航） &ndash;&gt;
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="">控制台</a></li>
             <li class="layui-nav-item"><a href="">商品管理</a></li>
@@ -47,12 +48,14 @@
             </li>
             <li class="layui-nav-item"><a href="">退了</a></li>
         </ul>
-    </div>
+    </div>-->
+    <div th:replace="~{own/commes :: topbar}"></div>
+
 
 </div>
 
 
-<div>
+<div class="cc_div">
     <div class="cc_left">
        <div class="cc_leftTop">
 
@@ -100,8 +103,9 @@
            </span>
            <button>关注</button>
        </div>
-
+        <!--相册信息的描述-->
         <div class="cc_infobox">
+            <span id="album_id" style="display: none" th:text="${session.currentAlbum.getAid()}">相册id</span>
             <p th:text="${session.currentAlbum.getA_name()}">相册名称</p>
             <p>相册描述：<span th:text="${session.currentAlbum.getA_describe()}"></span></p>
             <p style="margin-top: 20px;font-size: 12px">
@@ -116,9 +120,65 @@
                 <span>收藏数:300</span>
             </div>
         </div>
-
+        <!--评论信息-->
         <div class="cc_comment" style="margin-left: 30px;margin-top: 30px">
-            评论区域
+
+
+            <h5>评论区</h5>
+
+           <div class="cc_comment__textarea" style="margin-bottom: 20px">
+               <textarea placeholder="提点意见，让TA有所进步" form="commentForms" name="comment" style="margin-top: 0px; margin-bottom: 0px; height: 79px;"></textarea>
+              <div class="comment__textarea_form" style="overflow: hidden">
+                  <form action="/recomm/comment" method="post" id="commentForms">
+                      <input type="text" style="display: none" name="currentAid" th:value="${session.currentAlbum.getAid()}">
+                      <input id="comment_userID" type="text" style="display: none" name="userID" th:value="${session.user}!=null ?${session.user.getUid()}:''">
+                      <input type="submit" value="评论" style="float: right">
+                  </form>
+              </div>
+
+
+           </div>
+
+            <!--评论列表-->
+            <div class="cc_comments">
+              <div class="cc_comment_list"  th:each="comment,commentStat : ${session.comments}"  style="background-color: #92B8B1;margin-bottom: 20px">
+                <div class="cc_comment_part">
+
+                        <a style="position:absolute;">
+                          <img class="layui-nav-img" th:src="'/' + ${comment.getProfile_photo()}">
+                        </a>
+                        <div style="margin-left: 40px">
+
+                            <span th:text="${comment.getUsername()}"></span>
+                            <div th:text="${comment.getC_content()}"></div>
+                            <span th:text="${comment.getC_time()}" style="font-size: 10px"></span>
+                            <!--父评论id，即该楼层发起者的id-->
+                            <p style="display: none" th:text="${comment.getC_id()}"></p>
+                            <a href="javascript:;" class="reply_btn" >回复</a>
+                        </div>
+                    
+                    <!--子评论-->
+                    <div th:if="${not #strings.isEmpty(comment.getChild())}">
+                        <div th:each="commentChild:${comment.getChild()}" style="margin-top: 10px;margin-left: 20px">
+                            <a style="position:absolute;">
+                                <img class="layui-nav-img" th:src="'/' + ${commentChild.getProfile_photo()}">
+                            </a>
+                            <div style="margin-left: 40px">
+
+                                <span th:text="${commentChild.getUsername()}"></span>
+                                <span th:if="${not #strings.isEmpty(commentChild.getTargetName())}" th:text="'回复：'+${commentChild.getTargetName()}" style="font-size: 12px"></span>
+                                <div th:text="${commentChild.getC_content()}"></div>
+                                <span th:text="${commentChild.getC_time()}" style="font-size: 10px"></span>
+                                 <!--父评论id，即该楼层发起者的id-->
+                                <p style="display: none" th:text="${comment.getC_id()}"></p>
+                                <a href="javascript:;" class="reply_btn" >回复</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+           </div>
         </div>
 
     </div>
@@ -127,6 +187,50 @@
 
 
 <script src="../static/layui/layui.js" charset="utf-8"></script>
+
+<!--插入回复框-->
+<script type="text/javascript">
+    $(function(){
+        //页面加载完毕后开始执行的事件
+        $(".reply_btn").click(function(){
+            //获取相册的id
+            var album_id = $("#album_id").text();
+            //获取回复对象的名称,即兄弟节点的第一个元素的值
+            var name =  $(this).siblings(":first").text();
+            //获取父回复的id,即评论楼id
+            var parent_id = $(this).siblings("p").text();
+            //获取当前用户的id
+            var userId = $("#comment_userID").val();
+
+            alert(name);
+            $(".reply_textarea").remove();
+            //插入div
+            $(this).parent()
+                .append("" +
+                    "<div class='reply_textarea'>" +
+                    "<textarea name='commentTex' form='commentForm' cols='40' rows='5'></textarea><br/>" +
+                    "<form action='/recomm/replyComment' method='post' id='commentForm'>"+
+                    "<input style='display: none' type='text' name='targetName' id='setValue1'>"+
+                    "<input style='display: none' type='text' name='parent_id' id='setValue2'>"+
+                    "<input style='display: none' type='text' name='album_id' id='setValue3'>"+
+                    "<input style='display: none' type='text' name='userID' id='setValue4'>"+
+                    "<input type='submit' value='评论' />" +
+                    "<a onclick='delRow()'>取消</a>"+
+                    "</div>");
+           /* 设置添加的div中input的值*/
+            $("#setValue1").val(name);
+            $("#setValue2").val(parent_id);
+            $("#setValue3").val(album_id);
+            $("#setValue4").val(userId);
+        });
+    });
+    /* 删除 */
+    function delRow() {
+        $(".reply_textarea").remove();
+    }
+</script>
+
+
 <script>
     //JavaScript代码区域
     layui.use('element', function(){
@@ -134,8 +238,6 @@
 
     });
 </script>
-
-
 
 <script type="text/javascript">
     $(document).ready(function() {

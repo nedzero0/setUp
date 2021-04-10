@@ -1,6 +1,7 @@
 package com.setup.mapper;
 
 import com.setup.entity.Album;
+import com.setup.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,8 @@ public interface AlbumMapper {
      public Album queryOldAlbum(String i_id);
      //还原相册状态为1
      public int updateStatus(int aid);
+
+
 
 
 }

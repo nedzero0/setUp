@@ -55,4 +55,6 @@ SELECT aid FROM image WHERE i_id = #{i_id}
       update album set a_status= 1 where aid = #{aid}
     </update>
 
+
+
 </mapper>

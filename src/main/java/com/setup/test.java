@@ -1,12 +1,10 @@
 package com.setup;
 
 import com.setup.entity.Album;
+import com.setup.entity.Comment;
 import com.setup.entity.Image;
 import com.setup.entity.User;
-import com.setup.mapper.AlbumMapper;
-import com.setup.mapper.ImageMapper;
-import com.setup.mapper.RecommendMapper;
-import com.setup.mapper.UserMapper;
+import com.setup.mapper.*;
 import com.setup.service.ImageService;
 import com.setup.service.UserService;
 import com.setup.service.impl.AlbumServiceImpl;
@@ -55,13 +53,29 @@ public class test {
     private AlbumMapper albumMapper;
     @Autowired
     private RecommendMapper recommendMapper;
+    @Autowired
+    private CommentMapper commentMapper;
 
 
     @Test
     public void test() {
 
-        User user = userService.queryOther(2);
-        System.out.println(user);
+
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("data获取的时间："+simpleDateFormat.format(date));
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("calendder获取的时间："+formatter.format(calendar.getTime()));
+
+     /*   List<Comment> comments = commentMapper.queryComment(20);
+        System.out.println(comments);
+*/
+
+
+        /*User user = userService.queryOther(2);
+        System.out.println(user);*/
 
       /*  Album list = recommendMapper.queryByAmID(2);
         User user  = recommendMapper.queryOwnUser(list.getUid());

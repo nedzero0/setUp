@@ -1,9 +1,7 @@
 package com.setup.controller;
 
-import com.setup.entity.Album;
-import com.setup.entity.Image;
-import com.setup.entity.Page;
-import com.setup.entity.User;
+import com.setup.entity.*;
+import com.setup.mapper.CommentMapper;
 import com.setup.mapper.RecommendMapper;
 import com.setup.service.ImageService;
 import com.setup.service.UserService;
@@ -12,6 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -23,6 +26,8 @@ public class RecommController {
     private ImageService imageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CommentMapper commentMapper;
 
     Page page = new Page();
     List<Album> albums;
@@ -38,7 +43,7 @@ public class RecommController {
         return "recommend";
     }*/
 
-    //根据标签进来的
+    //根据标签进来的，刚进来的页面
     @RequestMapping(value = "/queryTag",method = RequestMethod.GET)
     public String queryTag(HttpSession session,String name,Integer start) {
         System.out.println(name);
@@ -93,20 +98,101 @@ public class RecommController {
     public String queryByAmID(HttpSession session,@RequestParam int aid){
         //相册信息
         Album album = recommendMapper.queryByAmID(aid);
-        System.out.println(album);
+        //System.out.println(album);
         session.setAttribute("currentAlbum",album);
 
         //照片信息
         List<Image> list = imageService.queryImageByAid(aid);
-        System.out.println(list);
+      //  System.out.println(list);
         session.setAttribute("currentImages",list);
         //用户信息
         User user = userService.queryOther(album.getUid());
         session.setAttribute("otherUser",user);
+        //评论信息
+        /*List<Comment> comments = commentMapper.queryComment(aid);
+        System.out.println(comments);
+        session.setAttribute("comments",comments);*/
+
+        List<Comment> allComments = commentMapper.queryComment(aid);
+        System.out.println("全部:"+allComments);
+        List<Comment> parents = new ArrayList<>();//最终排好的评论，返回的
+        //做成层级评论
+        for (Comment comment:allComments){
+            if (comment.getParent_id()==null){
+              parents.add(comment);
+            }else {
+              for (Comment parent:parents){
+                  System.out.println("现在的parent:"+parent);
+                  if (parent.getC_id() == comment.getParent_id()){
+                      if (parent.getChild() == null) {
+                          parent.setChild(new ArrayList<>());
+                      }
+                      //添加进入父评论列表
+                      parent.getChild().add(comment);
+                      break;
+                  }
+              }
+            }
+        }
+        System.out.println(parents);
+        session.setAttribute("comments",parents);
 
 
         return "reAlbum";
     }
+
+
+
+    //评论功能
+    @PostMapping(value = "/comment")
+    public String comment(HttpSession session,Integer currentAid,Integer userID,String comment){
+        //获取到相册id,用户id  评论的内容
+        if (userID==null || "".equals(userID)){
+            return "login";
+        }
+       else{
+            Comment comment1 = new Comment();
+            //获取当前时间
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            comment1.setC_time(formatter.format(calendar.getTime()));
+            comment1.setAid(currentAid);
+            comment1.setUid(userID);
+            comment1.setC_content(comment);
+
+            System.out.println(comment1);
+            //插入数据库
+            commentMapper.insertComment(comment1);
+
+            queryByAmID(session,currentAid);
+
+        }
+        System.out.println(currentAid);
+        System.out.println(userID);
+
+        return "reAlbum";
+    }
+
+    //回复功能
+    @PostMapping(value = "/replyComment")
+    @ResponseBody
+    public String getComment(@RequestParam String commentTex,String targetName,Integer album_id,Integer parent_id,Integer userID){
+        //接受 相册id,评论对象的id,回复内容
+        System.out.println("评论的相册id"+album_id);
+        System.out.println("评论发起者："+userID);
+        System.out.println("被评论的(父评论)的ID:"+parent_id);
+        System.out.println("内容："+commentTex);
+        System.out.println("回复的用户名称："+targetName);
+
+
+
+
+
+
+        return commentTex;
+    }
+
 
 
 

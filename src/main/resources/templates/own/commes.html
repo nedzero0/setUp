@@ -28,8 +28,8 @@
     <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item">
             <a href="javascript:;">
-                <img th:src="${session.headName}" class="layui-nav-img">
-                <span th:text="${session.user.username}"></span>
+                <img th:src="${session.headName}!=null ?${session.headName}:'http://t.cn/RCzsdCq'" th:text="${session.user}!=null ?${session.user.username}:'登录'" class="layui-nav-img">
+                <span class="layui-nav-more"></span>
             </a>
             <dl class="layui-nav-child">
                 <dd><a href="/own/changeHead.html">更换头像</a></dd>
