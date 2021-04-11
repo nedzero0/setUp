@@ -3,6 +3,7 @@ package com.setup.controller;
 import com.setup.entity.*;
 import com.setup.mapper.CommentMapper;
 import com.setup.mapper.RecommendMapper;
+import com.setup.service.AlbumService;
 import com.setup.service.ImageService;
 import com.setup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.crypto.Data;
+import java.beans.IntrospectionException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +30,8 @@ public class RecommController {
     private UserService userService;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private AlbumService albumService;
 
     Page page = new Page();
     List<Album> albums;
@@ -93,7 +97,7 @@ public class RecommController {
     }
 
 
-    //根据推荐界面传来的相册 id 查询相册的所有信息,和相册下的照片信息，和用户信息，评论信息
+    //根据推荐界面传来的相册 id 查询该相册的所有信息,和相册下的照片信息，和用户信息，评论信息
     @RequestMapping(value = "/queryByAmID",method = RequestMethod.GET)
     public String queryByAmID(HttpSession session,@RequestParam int aid){
         //相册信息
@@ -105,7 +109,7 @@ public class RecommController {
         List<Image> list = imageService.queryImageByAid(aid);
       //  System.out.println(list);
         session.setAttribute("currentImages",list);
-        //用户信息
+        //该相册拥有者的用户信息
         User user = userService.queryOther(album.getUid());
         session.setAttribute("otherUser",user);
         //评论信息
@@ -145,7 +149,7 @@ public class RecommController {
 
     //评论功能
     @PostMapping(value = "/comment")
-    public String comment(HttpSession session,Integer currentAid,Integer userID,String comment){
+    public String comment(HttpSession session,Integer album_id,Integer userID,String comment){
         //获取到相册id,用户id  评论的内容
         if (userID==null || "".equals(userID)){
             return "login";
@@ -157,7 +161,7 @@ public class RecommController {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             comment1.setC_time(formatter.format(calendar.getTime()));
-            comment1.setAid(currentAid);
+            comment1.setAid(album_id);
             comment1.setUid(userID);
             comment1.setC_content(comment);
 
@@ -165,35 +169,69 @@ public class RecommController {
             //插入数据库
             commentMapper.insertComment(comment1);
 
-            queryByAmID(session,currentAid);
+            queryByAmID(session,album_id);
 
         }
-        System.out.println(currentAid);
-        System.out.println(userID);
+        System.out.println("当前相册id"+album_id);
+        System.out.println("当前用户id:"+userID);
 
         return "reAlbum";
     }
 
     //回复功能
     @PostMapping(value = "/replyComment")
-    @ResponseBody
-    public String getComment(@RequestParam String commentTex,String targetName,Integer album_id,Integer parent_id,Integer userID){
+    public String getComment(HttpSession session,@RequestParam String commentTex,String targetName,Integer album_id,Integer parent_id,Integer userID){
         //接受 相册id,评论对象的id,回复内容
         System.out.println("评论的相册id"+album_id);
-        System.out.println("评论发起者："+userID);
+        System.out.println("回复发起者："+userID);
         System.out.println("被评论的(父评论)的ID:"+parent_id);
         System.out.println("内容："+commentTex);
         System.out.println("回复的用户名称："+targetName);
 
+        if (userID==null || "".equals(userID)){
+            return "login";
+        }
+
+        Comment comment = new Comment();
+        //获取当前时间
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        comment.setC_time(formatter.format(calendar.getTime()));
+        comment.setAid(album_id);
+        comment.setUid(userID);
+        comment.setParent_id(parent_id);
+        comment.setC_content(commentTex);
+        comment.setTargetName(targetName);
+
+        System.out.println(comment);
+        //插入数据库
+        commentMapper.insertReply(comment);
+
+        queryByAmID(session,album_id);
 
 
 
-
-
-        return commentTex;
+        return "reAlbum";
     }
 
 
+    //进入其它用户的个人界面
+    @GetMapping(value = "/intoOtherView")
+    public String intoOtherView(HttpSession session,@RequestParam Integer otherUid){
+        System.out.println("其它用户的id是："+otherUid);
+        //该用户的信息可能已经存储在了  session 的otherUser中，所以要判断
+        User user=(User) session.getAttribute("otherUser");
+        if (user==null){
+            User user1 = userService.queryOther(otherUid);
+            session.setAttribute("otherUser",user1);
+        }
+        //查询该用户的所有相册信息
+
+        List<Album> albums = albumService.queryAlbum(otherUid);
+        session.setAttribute("otherAlbums",albums);
+
+        return "otherUserInfo";
+    }
 
 
 

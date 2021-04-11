@@ -95,7 +95,7 @@
         <!--头部，有用户的头像信息和名称信息-->
        <div class="cc_user_item">
            <span>
-                   <a href="javascript:;">
+                   <a th:href="@{'/recomm/intoOtherView?otherUid='+${session.otherUser.getUid()}}" target="_blank">
                     <img th:src="'/' + ${session.otherUser.getProfile_photo()}" class="layui-nav-img">
                     <span th:text="${session.otherUser.getUsername()}" >姓名</span>
                        <p th:text="${session.otherUser.getAutograph()}">个性签名</p>
@@ -130,7 +130,7 @@
                <textarea placeholder="提点意见，让TA有所进步" form="commentForms" name="comment" style="margin-top: 0px; margin-bottom: 0px; height: 79px;"></textarea>
               <div class="comment__textarea_form" style="overflow: hidden">
                   <form action="/recomm/comment" method="post" id="commentForms">
-                      <input type="text" style="display: none" name="currentAid" th:value="${session.currentAlbum.getAid()}">
+                      <input type="text" style="display: none" name="album_id" th:value="${session.currentAlbum.getAid()}">
                       <input id="comment_userID" type="text" style="display: none" name="userID" th:value="${session.user}!=null ?${session.user.getUid()}:''">
                       <input type="submit" value="评论" style="float: right">
                   </form>

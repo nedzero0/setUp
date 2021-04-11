@@ -27,11 +27,11 @@
     </ul>
     <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item">
-            <a href="javascript:;">
+            <a th:href="${session.headName}!=null ?'/own/personal.html':'/login.html'">
                 <img th:src="${session.headName}!=null ?${session.headName}:'http://t.cn/RCzsdCq'" th:text="${session.user}!=null ?${session.user.username}:'登录'" class="layui-nav-img">
                 <span class="layui-nav-more"></span>
             </a>
-            <dl class="layui-nav-child">
+            <dl class="layui-nav-child" th:if="${not #strings.isEmpty(session.headName)}">
                 <dd><a href="/own/changeHead.html">更换头像</a></dd>
             </dl>
         </li>

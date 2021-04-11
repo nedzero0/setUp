@@ -13,6 +13,8 @@ public interface CommentMapper {
     public List<Comment> queryComment(int aid);
     //添加评论
     public int insertComment(Comment comment);
+    //添加回复
+    public int insertReply(Comment comment);
 
 
 }
