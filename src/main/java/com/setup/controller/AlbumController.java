@@ -1,5 +1,6 @@
 package com.setup.controller;
 
+import com.google.gson.Gson;
 import com.setup.entity.Album;
 import com.setup.entity.Image;
 import com.setup.entity.User;
@@ -296,4 +297,32 @@ public class AlbumController {
         session.setAttribute("reImages",reImages);
         return "redirect:/own/album.html";
     }
+
+    //相册id
+    private Integer aid=20;
+
+    //查看相册下的图片,Vue的方式
+    //先从前端获取到相册id，然后存储起来
+    @RequestMapping("/queryAidVue")
+    @ResponseBody
+    public void queryAidVue(Integer id){
+          aid = id;
+    }
+    @CrossOrigin(origins ="*",maxAge = 3600)
+    @RequestMapping("/queryAlbumVue")
+    @ResponseBody
+    public String queryAlbumVue(){
+        System.out.println("进来了,当前相册id为："+aid);
+        List<Image> images = imageService.queryImageByAid(aid);
+        System.out.println("该相册下照片为："+images);
+
+        Gson gson = new Gson();
+        String result = gson.toJson(images);
+        System.out.println("json为："+result);
+        return result;
+    }
+
+
+
+
 }

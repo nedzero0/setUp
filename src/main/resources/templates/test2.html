@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>相册信息- Layui</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../static/css/backstage.css">
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <!--<script src="//unpkg.com/vue/dist/vue.js"></script>-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .user-headImage{
+            height: 300px;
+            width: 300px;
+            /* display: inline-block;*/
+            float: left;
+        }
+        .user-headImage img{
+            object-fit: cover; /*不变形、铺满*/
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+        }
+        .list{
+            float: left;
+            margin-right: 10px;
+        }
+       .list-right{
+           position: absolute;
+           top: 2px;
+           right: 3px;
+           color: #c8e1fa;
+           z-index: 1;
+           cursor: pointer;
+       }
+        .list-right-div{
+            display: none;
+        }
+        .list-right-div button{
+            border: none;
+            margin-bottom: 3px;
+            background-color: #c8e1fa;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .list-right:hover .list-right-div{
+            display: block;
+        }
+        .lists-value{
+            position: absolute;
+            left: 2px;
+            z-index: 1;
+            display: none;
+        }
+
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{own/commes :: topbar}"></div>
+    <div th:replace="~{own/commes :: sidebar}"></div>
+    <div class="layui-body" style="padding-left: 20px">
+        <!-- 内容主体区域 -->
+        <div style="margin-top: 20px;margin-bottom: 30px">
+            <button type="button" data-method="addImages" class="layui-btn layui-btn-normal addIma">上传照片/视频</button>
+            <button type="button" @click="deleteItems" class="layui-btn layui-btn-normal">批量删除</button>
+
+        </div>
+
+        <div class="albums">
+            <div class="albums-1">
+                <ul style="float: left">
+                    <form id="listForm" th:action="@{/album/deleteItems(uid=${session.user.getUid()})}" method="post">
+
+                        <div class="lists" style="overflow: auto">
+
+                            <p>{{vals}}</p>
+
+                            <div class="list" v-for="item of drawerTableList" :key="item" style="position:relative;">
+
+                                <td><input class="lists-value" type="checkbox" v-model="vals" :value="item.id"></td>
+
+                                <div class="list-right">
+                                    <span style="float: right">菜单</span>
+                                    <br>
+                                    <div class="list-right-div">
+                                        <button  type="button" value="ww" @click="setCover(item.path)">设为封面</button>
+                                        <br>
+                                        <button  type="button" value="12" @click="delImage(item.id)">删除图片</button>
+                                    </div>
+
+                                </div>
+                                <el-image
+                                        class = "user-headImage"
+                                        :src="item.path"
+                                        :preview-src-list="item.list"
+                                >
+                                </el-image>
+                            </div>
+
+                        </div>
+
+
+
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{own/commes :: footbar}"></div>
+
+</div>
+
+
+<div id="addImagesDiv" class="layui-upload" style="display: none;padding: 20px 20px">
+    <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+    <div class="layui-upload-list">
+        <table class="layui-table">
+            <thead>
+            <tr>   <th>文件名</th>
+                <th>文件缩略图</th>
+                <th>大小</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr></thead>
+            <tbody id="demoList"></tbody>
+        </table>
+    </div>
+    <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+</div>
+
+<script src="../static/layui/layui.js"></script>
+<script src="../static/js/jquery-3.3.1.js"></script>
+
+<script>
+
+    var a = 0;
+    var lists = document.getElementsByClassName("lists-value");
+
+    var Main = {
+        data() {
+            return {
+                srcList: [
+                    'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+                    'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
+                    'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
+                ],
+                drawerTableList:[],
+                vals:[],
+            }
+        },
+        mounted:function(){  //这方法相当于 页面初始化
+            this.initSrcList();
+            this.array();
+        },
+        methods:{
+            initSrcList(){
+                axios.get("http://localhost:8770/album/queryAlbumVue")
+                    .then(function (response) {
+                        console.log(response);
+                        console.log("成功")
+                    },function (err) {
+                        console.log("出错")
+                    })
+            },
+            array(){
+                var that = this;
+                this.list = [];
+                // 表格数据  drawerTableList
+                //获取每张图片的地址
+                //获取每张图片的地址
+                for(var i = 0 ; i < that.srcList.length ; i ++){
+                    this.list.push(that.srcList[i]);
+                }
+
+                //根据图片顺序（index）更改每张图片绑定的list的图片顺序
+                for(var i = 0 ; i < that.srcList.length ; i ++){
+                    var container = this.list;
+                    var frontArr = container.slice(0,i);
+                    var behindArr = container.slice(i,that.srcList.length);
+                    var list = behindArr.concat(frontArr);
+
+                    //为数组添加属性和值
+                    this.drawerTableList.push({path: this.list[i],id:i,list:list});
+                }
+               /* console.log("现在的drawerTableList是：");
+                console.log(that.drawerTableList);*/
+            },
+            setCover(v) {
+                var that = this;
+                console.log(v);
+                console.log(val1);
+            },
+            delImage:function (v) {
+                var that = this;
+                console.log(v)
+            },
+            deleteItems:function () {
+                var that = this;
+                if (a==0){
+                    for (var i=0;i<lists.length;i++){
+                        lists[i].style.display='block';
+                    }
+                    a=1;
+                }
+                else{
+                    alert("提交进入后台成功后");
+                    //axios代码,要改的
+                   /* axios.get("https://autumnfish.cn/song/detail?ids="+musicId)
+                        .then(function (response) {
+                            console.log(response);
+                            that.musicCover = response.data.songs[0].al.picUrl;
+                            console.log(that.musicCover);
+                        },function (err) {})*/
+
+                  that.vals = [];
+                    for (var i=0;i<lists.length;i++){
+                        lists[i].style.display='none';
+                    }
+                    a=0;
+                }
+            }
+
+        }
+    }
+
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('.layui-body');
+
+</script>
+
+
+<!--<script type="text/javascript">
+    var a = 0;
+    var lists = document.getElementsByClassName("lists-value");
+    //批量删除
+    function deleteItems() {
+        if (a==0){
+               for (var i=0;i<lists.length;i++){
+                   lists[i].style.display='block';
+               }
+               a=1;
+        }
+        else{
+          /*  //document.getElementById("listForm").onsubmit;
+            layer.confirm('确定要删除吗', function(index){
+                console.log(index);
+                $("#listForm").submit();
+                layer.close(index);
+            });*/
+            for (var i=0;i<lists.length;i++){
+                lists[i].style.display='none';
+            }
+           a=0;
+        }
+
+    }
+</script>-->
+
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交,使用ajax提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            alert(JSON.stringify(data.field));
+            $.ajax({
+                type:"POST",
+                dataType:"json",
+                url:"/user/updatePersonDate",
+                data:JSON.stringify(data.field),
+                contentType:"application/json",
+                success:function (result) {
+                    /* console.log(result);*/
+                },
+                error:function () {
+                    alert("异常！")
+                }
+
+            });
+
+            return false;
+        });
+    });
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
+    });
+
+
+
+    //弹出层：添加图片
+    layui.use('layer', function() { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        //弹出层：创建相册
+        //触发事件
+        var active = {
+            addImages: function () {
+                var that = this;
+                //多窗口模式，层叠置顶
+                layer.open({
+                    type: 1 //此处以iframe举例
+                    , title: ['添加照片', 'font-size:18px;text-align:center;']
+                    , area: ['1400px', '700px'] //宽高
+                    , shade: 0
+                    , content: $('#addImagesDiv')
+                    , btn: ["确认", "取消"] //只是为了演示
+                    , yes: function (index, layero) {
+
+                        $(that).click();
+                    }
+                });
+            }
+        };
+
+        $('.addIma').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+            // var i = $(this).val();
+        });
+    });
+    //上传图片
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+
+        //多文件列表示例
+        var demoListView = $('#demoList')
+            ,uploadListIns = upload.render({
+            elem: '#testList'
+            ,url: '/album/addImages' //改成您自己的上传接口
+            ,accept: 'file'
+            ,multiple: true
+            ,auto: false
+            ,bindAction: '#testListAction'
+            ,choose: function(obj){
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function(index, file, result){
+                    var tr = $(['<tr id="upload-'+ index +'">'
+                        ,'<td>'+ file.name +'</td>'
+                        ,'<td><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></td>'
+                        ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                        ,'<td>等待上传</td>'
+                        ,'<td>'
+                        ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                        ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        ,'</td>'
+                        ,'</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function(){
+                        obj.upload(index, file);
+                    });
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function(){
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    demoListView.append(tr);
+                });
+            }
+            ,done: function(res, index, upload){
+                if(res.success==1){ //上传成功
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(4).html(''); //清空操作
+                    //tr.html('');
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            ,error: function(index, upload){
+                var tr = demoListView.find('tr#upload-'+ index)
+                    ,tds = tr.children();
+                tds.eq(3).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+    });
+
+
+
+</script>
+</body>
+</html>
