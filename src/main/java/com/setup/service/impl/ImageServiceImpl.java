@@ -78,4 +78,9 @@ public class ImageServiceImpl implements ImageService {
     public int delImages(String[] str) {
         return imageMapper.delImages(str);
     }
+
+    @Override
+    public int setCover(String aid, String image_path) {
+        return imageMapper.setCover(aid,image_path);
+    }
 }

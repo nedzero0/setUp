@@ -6,23 +6,17 @@ import com.setup.entity.User;
 import com.setup.service.AlbumService;
 import com.setup.service.ImageService;
 import com.setup.service.UserService;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -240,7 +234,7 @@ public class AlbumController {
 
     //彻底删除图片，从回收站中
     @RequestMapping("/delForRe")
-    public String delForRe(String[] redIds,HttpSession session,HttpServletRequest request){
+    public String delForRe(String[] redIds,HttpSession session){
         System.out.println("彻底删除");
         //System.out.println(Arrays.toString(redIds));
         User user = (User)session.getAttribute("user");
@@ -272,4 +266,34 @@ public class AlbumController {
     }
 
 
+    //设置照片为相册封面，传入参数 当前相册的id，照片的地址信息
+    @PostMapping("/setCover")
+    @ResponseBody
+    public String setCover(String aid,String image_path){
+        System.out.println("相册id为："+aid);
+        System.out.println("该图片的物理地址是："+image_path);
+        //设置相册封面
+        int i = imageService.setCover(aid, image_path);
+        if (i>0){
+            return "设置成功";
+        }
+        return "设置失败";
+    }
+
+    //删除单个照片
+    @RequestMapping("/deleteItem")
+    public String deleteItem(Integer i_id, Integer uid, HttpSession session){ //传入照片id  用户id
+        System.out.println("照片id:"+i_id+"   用户id:"+uid);
+        //删除照片到回收站
+        imageService.recoveryImage(i_id);
+        //更新相册和回收站
+        int newAid = (int)session.getAttribute("newAid");
+        //更新相册下的图片session
+        List<Image> images = imageService.queryImageByAid(newAid);
+        session.setAttribute("images",images);
+        //更新回收站的session
+        List<Image> reImages = imageService.queryReImage(uid);
+        session.setAttribute("reImages",reImages);
+        return "redirect:/own/album.html";
+    }
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <script src="../static/js/vue.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <!--<script src="//unpkg.com/vue/dist/vue.js"></script>-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <title>Title</title>
+    <style>
+        .user-headImage{
+            height: 300px;
+            width: 300px;
+            /* display: inline-block;*/
+            float: left;
+        }
+        .user-headImage img{
+            object-fit: cover; /*不变形、铺满*/
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="list">
+        <div v-for="item of drawerTableList" :key="item">
+            <el-image
+                    class = "user-headImage"
+                    :src="item.path"
+                    :preview-src-list="item.list"
+            >
+            </el-image>
+        </div>
+
+
+     <!--   <el-table
+                :data="drawerTableList"
+        >
+        <el-table-column property="path" label="图片" align="center">
+            <template slot-scope="scope">
+                <el-image
+                        style="width: 50px; height: 50px"
+                        :src="scope.row.path"
+                        :preview-src-list="scope.row.list"
+                >
+                </el-image>
+            </template>
+        </el-table-column>
+        </el-table>-->
+    </div>
+
+</div>
+
+<script>
+    var Main = {
+        data() {
+            return {
+                srcList: [
+                    'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+                    'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
+                    'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
+                ],
+                drawerTableList:[]
+            }
+        },
+        mounted:function(srcList){  //这方法相当于 页面初始化
+            this.list = [];
+
+            // 表格数据  drawerTableList
+            //获取每张图片的地址
+            //获取每张图片的地址
+            for(var i = 0 ; i < this.srcList.length ; i ++){
+                this.list.push(this.srcList[i]);
+            }
+
+            //根据图片顺序（index）更改每张图片绑定的list的图片顺序
+            for(var i = 0 ; i < this.srcList.length ; i ++){
+                var container = this.list;
+                var frontArr = container.slice(0,i);
+                var behindArr = container.slice(i,this.srcList.length);
+                var list = behindArr.concat(frontArr);
+
+                //为数组添加属性和值
+                this.drawerTableList.push({path: this.list[i], list:list});
+               }
+            console.log("现在的drawerTableList是：");
+            console.log(this.drawerTableList);
+
+        }
+    }
+
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('.list')
+</script>
+
+</body>
+</html>

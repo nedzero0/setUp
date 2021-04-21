@@ -40,4 +40,7 @@ public interface ImageService {
     //批量彻底删除图片，即删除状态码为0的
     public int delImages(String[] str);
 
+    //设置照片为相册封面
+    public int setCover(String aid,String image_path);
+
 }

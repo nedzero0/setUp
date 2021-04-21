@@ -23,7 +23,7 @@ public interface ImageMapper {
     //更新图片原信息,即图片名称和描述
     public int updateImage(String name,String describe,int i_id);
 
-    //回收图片，没有删除，只是放到了回收站（假的，不做这一步），只改变了状态码
+    //回收图片，没有删除，只是放到了回收站  只改变了状态码
     public int recoveryImage(int i_id);
     //批量回收
     public int recoveryImages(String[] str);
@@ -38,4 +38,6 @@ public interface ImageMapper {
     //批量彻底删除图片，即删除状态码为0的
     public int delImages(String[] str);
 
+    //设置照片为相册封面
+    public int setCover(String aid,String image_path);
 }
