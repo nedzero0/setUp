@@ -1,6 +1,7 @@
 package com.setup.mapper;
 
 import com.setup.entity.Album;
+import com.setup.entity.AlbumQuery;
 import com.setup.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,8 @@ public interface AlbumMapper {
      public int updateStatus(int aid);
 
 
+     //Vue  分页查询
+     public List<Album> query(AlbumQuery albumQuery);
 
 
 }

@@ -16,13 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Controller
+@CrossOrigin(origins ="*",maxAge = 3600)
 @RequestMapping("/album")
 public class AlbumController {
     @Autowired
@@ -175,9 +178,6 @@ public class AlbumController {
             e.printStackTrace();
         }
 
-
-
-
         return "{\"success\":1"+"}";
     }
 
@@ -267,61 +267,72 @@ public class AlbumController {
     }
 
 
-    //设置照片为相册封面，传入参数 当前相册的id，照片的地址信息
-    @PostMapping("/setCover")
-    @ResponseBody
-    public String setCover(String aid,String image_path){
-        System.out.println("相册id为："+aid);
-        System.out.println("该图片的物理地址是："+image_path);
-        //设置相册封面
-        int i = imageService.setCover(aid, image_path);
-        if (i>0){
-            return "设置成功";
-        }
-        return "设置失败";
-    }
 
-    //删除单个照片
-    @RequestMapping("/deleteItem")
-    public String deleteItem(Integer i_id, Integer uid, HttpSession session){ //传入照片id  用户id
-        System.out.println("照片id:"+i_id+"   用户id:"+uid);
-        //删除照片到回收站
-        imageService.recoveryImage(i_id);
-        //更新相册和回收站
-        int newAid = (int)session.getAttribute("newAid");
-        //更新相册下的图片session
-        List<Image> images = imageService.queryImageByAid(newAid);
-        session.setAttribute("images",images);
-        //更新回收站的session
-        List<Image> reImages = imageService.queryReImage(uid);
-        session.setAttribute("reImages",reImages);
-        return "redirect:/own/album.html";
-    }
+    /**
+     * 下面是前端用vue重写的   后端也做出了调整
+     * **/
 
     //相册id
-    private Integer aid=20;
+    private Integer aid;
+    private Integer index;
 
     //查看相册下的图片,Vue的方式
-    //先从前端获取到相册id，然后存储起来
+    //先从前端获取到相册id，然后存储起来  前端自动调用queryAlbumVue方法
     @RequestMapping("/queryAidVue")
-    @ResponseBody
-    public void queryAidVue(Integer id){
-          aid = id;
+    public String queryAidVue(HttpSession session,Integer id,Integer index){
+          this.aid = id;
+          this.index = index;
+        session.setAttribute("newAid",aid);
+        session.setAttribute("index",index);
+          return "albumVue";
     }
+    //查询相册下的照片
     @CrossOrigin(origins ="*",maxAge = 3600)
     @RequestMapping("/queryAlbumVue")
     @ResponseBody
     public String queryAlbumVue(){
-        System.out.println("进来了,当前相册id为："+aid);
         List<Image> images = imageService.queryImageByAid(aid);
-        System.out.println("该相册下照片为："+images);
-
+        //改为json格式传输返回
         Gson gson = new Gson();
         String result = gson.toJson(images);
-        System.out.println("json为："+result);
         return result;
     }
 
+    //设置照片为相册封面，传入 照片的地址信息
+    @GetMapping("/setCoverVue")
+    @ResponseBody
+    public void setCoverVue(HttpSession session,String coverPath){
+        //设置相册封面
+        int i = imageService.setCover(aid, coverPath);
+        //获取user session
+        User user = (User)session.getAttribute("user");
+        //更新session
+        List<Album> albums = albumService.queryAlbum(user.getUid());
+        session.setAttribute("albums",albums);
+    }
+
+    //删除单/多个照片
+    @GetMapping("/deleteItemVue")
+    @ResponseBody
+    public void deleteItem(String[] vals,HttpSession session){ //传入照片id  用户id
+        System.out.println("vals："+ Arrays.toString(vals));
+        //获取user session
+        User user = (User)session.getAttribute("user");
+        if (vals!=null){
+            //删除
+            int i = imageService.recoveryImages(vals);
+            int newAid = (int)session.getAttribute("newAid");
+            if (i>0){
+                System.out.println("更新session 现在的相册id是"+newAid);
+                //更新相册下的图片session
+                List<Image> images = imageService.queryImageByAid(newAid);
+                session.setAttribute("images",images);
+                //更新回收站的session
+                List<Image> reImages = imageService.queryReImage(user.getUid());
+                session.setAttribute("reImages",reImages);
+            }
+        }
+    }
 
 
 

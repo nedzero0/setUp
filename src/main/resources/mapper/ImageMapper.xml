@@ -96,8 +96,8 @@ ON i.status = 0 AND i.aid = a.aid AND a.uid = #{uid}
     <!--设置照片为相册封面-->
     <update id="setCover">
         UPDATE album
-        SET a_coverPath = #{aid}
-        WHERE aid = #{image_path}
+        SET a_coverPath = #{image_path}
+        WHERE aid = #{aid}
     </update>
 
 

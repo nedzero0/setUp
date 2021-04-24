@@ -55,6 +55,21 @@ SELECT aid FROM image WHERE i_id = #{i_id}
       update album set a_status= 1 where aid = #{aid}
     </update>
 
+    <!--Vue  分页查询    名称用模糊查询，类型不用-->
+    <select id="query" parameterType="com.setup.entity.AlbumQuery" resultType="com.setup.entity.Album">
+        select *
+        from album a
+        <where>
+            <if test="nameLike !=null and nameLike !='' ">
+                and a.a_name like "%"#{nameLike}"%"
+            </if>
+            <if test="tagLike !=null and tagLike !='' ">
+                and a.a_theme like #{tagLike}
+            </if>
+            and a.a_status = 1 and a.a_authority = 2
+        </where>
 
+
+    </select>
 
 </mapper>

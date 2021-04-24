@@ -75,14 +75,14 @@
         <div class="albums">
             <div class="albums-1">
                 <ul style="float: left">
-                    <form id="listForm" th:action="@{/album/deleteItems(uid=${session.user.getUid()})}" method="post">
+                   <!-- <form id="listForm"  method="post">-->
 
                         <div class="lists" style="overflow: auto">
 
                             <p>{{vals}}</p>
-
+                            <!--关键的HTML代码部分开始了-->
                             <div class="list" v-for="item of drawerTableList" :key="item" style="position:relative;">
-
+                                <!--这个是可以勾选照片，以便后面删除功能的实现-->
                                 <td><input class="lists-value" type="checkbox" v-model="vals" :value="item.id"></td>
 
                                 <div class="list-right">
@@ -95,6 +95,7 @@
                                     </div>
 
                                 </div>
+                                <!--关键代码，elementui中的组件-->
                                 <el-image
                                         class = "user-headImage"
                                         :src="item.path"
@@ -104,10 +105,8 @@
                             </div>
 
                         </div>
-
-
-
-                    </form>
+                        <!--关键的HTML代码部分结束了-->
+                   <!-- </form>-->
                 </ul>
             </div>
         </div>
@@ -146,62 +145,87 @@
     var Main = {
         data() {
             return {
-                srcList: [
-                    'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-                    'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-                    'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-                ],
-                drawerTableList:[],
-                vals:[],
+                drawerTableList:[],//照片重新排序,还有id等信息的最终在页面输出的。
+                vals:[],//这是单/多选删除的照片id集合
+                initData:[]//获取后台传过来的初始化数据
             }
         },
         mounted:function(){  //这方法相当于 页面初始化
-            this.initSrcList();
-            this.array();
+            this.initList();
         },
         methods:{
-            initSrcList(){
+            initList(){//拿到后台数据初始化
+                var that = this;
+                that.drawerTableList = [];
+                that.initData = [];
                 axios.get("http://localhost:8770/album/queryAlbumVue")
                     .then(function (response) {
-                        console.log(response);
-                        console.log("成功")
+                        that.initData = response.data;
+                        that.array();
                     },function (err) {
                         console.log("出错")
                     })
             },
-            array(){
+            array(){//对预览图片中的list重新排序
                 var that = this;
                 this.list = [];
-                // 表格数据  drawerTableList
-                //获取每张图片的地址
-                //获取每张图片的地址
-                for(var i = 0 ; i < that.srcList.length ; i ++){
-                    this.list.push(that.srcList[i]);
+               // 表格数据  drawerTableList
+               //获取每张图片的地址
+               //获取每张图片的地址
+                for(var i = 0 ; i < that.initData.length ; i ++){
+                    this.list.push('/'+that.initData[i].i_path);
                 }
+               //根据图片顺序（index）更改每张图片绑定的list的图片顺序
+               for(var i = 0 ; i < that.initData.length ; i ++){
+                   //按当前照片index重新排序
+                   var container = this.list;
+                   var frontArr = container.slice(0,i);
+                   var behindArr = container.slice(i,that.initData.length);
+                   var list = behindArr.concat(frontArr);
 
-                //根据图片顺序（index）更改每张图片绑定的list的图片顺序
-                for(var i = 0 ; i < that.srcList.length ; i ++){
-                    var container = this.list;
-                    var frontArr = container.slice(0,i);
-                    var behindArr = container.slice(i,that.srcList.length);
-                    var list = behindArr.concat(frontArr);
+                   //为数组添加属性和值
+                   this.drawerTableList.push({id:that.initData[i].i_id,aid:that.initData[i].aid,
+                       size:that.initData[i].i_size,uploadTime:that.initData[i].i_uploadTime,
+                       path: this.list[i],list:list});
+               }
 
-                    //为数组添加属性和值
-                    this.drawerTableList.push({path: this.list[i],id:i,list:list});
-                }
-               /* console.log("现在的drawerTableList是：");
-                console.log(that.drawerTableList);*/
+               console.log("排序好的:");
+               console.log(that.drawerTableList);
+
             },
-            setCover(v) {
+            setCover(v) {//设置照片为相册封面
                 var that = this;
-                console.log(v);
-                console.log(val1);
+                var coverPath = v;
+
+                this.$confirm('此操作将设置照片为相册封面, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(() => {
+                    axios.get("http://localhost:8770/album/setCoverVue?coverPath="+coverPath)
+                        .then(function (response) {
+
+                        },function (err) {
+                            console.log("出错")
+                        });
+
+                    this.$message({
+                        type: 'success',
+                        message: '设置成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消设置'
+                    });
+                });
             },
-            delImage:function (v) {
+            delImage:function (v) {//删除单个照片
                 var that = this;
-                console.log(v)
+                that.vals.push(v);
+                this.deleteComm(that);
+
             },
-            deleteItems:function () {
+            deleteItems:function () {//点击删除按钮，判断a=0  浮现标签，a=1传入照片id集合进入后台进行多个照片删除
                 var that = this;
                 if (a==0){
                     for (var i=0;i<lists.length;i++){
@@ -210,23 +234,41 @@
                     a=1;
                 }
                 else{
-                    alert("提交进入后台成功后");
-                    //axios代码,要改的
-                   /* axios.get("https://autumnfish.cn/song/detail?ids="+musicId)
-                        .then(function (response) {
-                            console.log(response);
-                            that.musicCover = response.data.songs[0].al.picUrl;
-                            console.log(that.musicCover);
-                        },function (err) {})*/
-
-                  that.vals = [];
+                    this.deleteComm(that);
+                    console.log("提交进入后台成功后");
                     for (var i=0;i<lists.length;i++){
                         lists[i].style.display='none';
                     }
                     a=0;
                 }
-            }
+            },
+            deleteComm:function (that) {  //删除照片的公共方法
+                this.$confirm('此操作将删除照片, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    console.log("eeee");
+                    axios.get("http://localhost:8770/album/deleteItemVue?vals="+that.vals)
+                        .then(function (response) {
+                            that.vals = [];
+                            //更新照片列表
+                            that.initList();
+                        },function (err) {
+                            console.log("出错")
+                        });
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
 
+            }
         }
     }
 
@@ -234,35 +276,6 @@
     new Ctor().$mount('.layui-body');
 
 </script>
-
-
-<!--<script type="text/javascript">
-    var a = 0;
-    var lists = document.getElementsByClassName("lists-value");
-    //批量删除
-    function deleteItems() {
-        if (a==0){
-               for (var i=0;i<lists.length;i++){
-                   lists[i].style.display='block';
-               }
-               a=1;
-        }
-        else{
-          /*  //document.getElementById("listForm").onsubmit;
-            layer.confirm('确定要删除吗', function(index){
-                console.log(index);
-                $("#listForm").submit();
-                layer.close(index);
-            });*/
-            for (var i=0;i<lists.length;i++){
-                lists[i].style.display='none';
-            }
-           a=0;
-        }
-
-    }
-</script>-->
-
 <script>
     //一般直接写在一个js文件中
     layui.use(['layer', 'form'], function(){

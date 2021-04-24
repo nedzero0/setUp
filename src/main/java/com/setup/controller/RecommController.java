@@ -5,9 +5,11 @@ import com.setup.mapper.CommentMapper;
 import com.setup.mapper.RecommendMapper;
 import com.setup.service.AlbumService;
 import com.setup.service.ImageService;
+import com.setup.service.RecommendService;
 import com.setup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -32,6 +34,8 @@ public class RecommController {
     private CommentMapper commentMapper;
     @Autowired
     private AlbumService albumService;
+    @Autowired
+    private RecommendService recommendService;
 
     Page page = new Page();
     List<Album> albums;
@@ -250,8 +254,25 @@ public class RecommController {
          //当前页码
          page.setCurrent(start);
          page.setName(name);
-         http://localhost:8770/recomm/queryTag?name=风景&start=1"
+        // http://localhost:8770/recomm/queryTag?name=风景&start=1"
          page.setPath("http://localhost:8770/recomm/"+""+mothName+"?name="+""+name+""+"&start=");
      }
+
+
+     //前端基于Vue写的
+     //查询，分页   可以根据相册名称，类型或用户名称查询
+     @CrossOrigin(origins ="*",maxAge = 3600)
+     @GetMapping(value = "/pageVue")
+     @ResponseBody
+     public PageVue<Album> query(AlbumQuery albumQuery,
+                       @RequestParam(value = "pageSize") Integer pageSize,
+                       @RequestParam(value = "pageNum") Integer pageNum){
+
+         System.out.println(albumQuery);
+         System.out.println(pageSize+" ::"+pageNum);
+         return recommendService.query(albumQuery, pageSize, pageNum);
+     }
+
+
 
 }

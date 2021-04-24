@@ -41,6 +41,6 @@ public interface ImageService {
     public int delImages(String[] str);
 
     //设置照片为相册封面
-    public int setCover(String aid,String image_path);
+    public int setCover(Integer aid,String image_path);
 
 }

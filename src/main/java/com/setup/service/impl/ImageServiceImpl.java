@@ -80,7 +80,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public int setCover(String aid, String image_path) {
+    public int setCover(Integer aid, String image_path) {
         return imageMapper.setCover(aid,image_path);
     }
 }

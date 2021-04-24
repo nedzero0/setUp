@@ -1,6 +1,7 @@
 package com.setup.mapper;
 
 import com.setup.entity.Album;
+import com.setup.entity.AlbumQuery;
 import com.setup.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

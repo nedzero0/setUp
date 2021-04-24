@@ -1,6 +1,8 @@
 package com.setup.service;
 
 import com.setup.entity.Album;
+import com.setup.entity.AlbumQuery;
+import com.setup.entity.PageVue;
 import com.setup.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -30,4 +32,9 @@ public interface RecommendService {
 
     //6.查出相册信息后根据相册的uid 查找主人的信息
     public User queryOwnUser(int uId);
+
+
+    //Vue  分页查询
+    public PageVue<Album> query(AlbumQuery albumQuery,Integer pageSize,Integer pageNum);
+
 }
