@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--上面的是映射文件头-->
+<mapper namespace="com.setup.mapper.CollectMapper">
+    <insert id="addCollect" parameterType="com.setup.entity.Collect">
+        insert into collect(uid,aid)
+        values (#{uid},#{aid})
+    </insert>
+
+    <delete id="deleteCollect">
+        delete from collect
+        where id = #{id}
+    </delete>
+
+    <select id="query" resultType="com.setup.entity.Album">
+        SELECT *
+        FROM album
+        WHERE aid IN(
+        select aid
+        FROM collect
+        where uid = #{uid}
+        )
+    </select>
+
+
+</mapper>

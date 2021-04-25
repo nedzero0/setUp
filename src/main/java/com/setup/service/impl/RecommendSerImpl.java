@@ -31,7 +31,7 @@ public class RecommendSerImpl implements RecommendService {
         return null;
     }
 
-    @Override
+     @Override
     public List<Album> queryByTag(String tag, int start, int count) {
         return null;
     }
@@ -68,7 +68,7 @@ public class RecommendSerImpl implements RecommendService {
 
     @Override
     public PageVue<Album> query(AlbumQuery albumQuery, Integer pageSize, Integer pageNum) {
-        com.github.pagehelper.Page<Album> page = PageHelper.startPage(pageNum,pageSize);//分页插件类的加载，它自动为下面的查询分页
+        com.github.pagehelper.Page<Album> page = PageHelper.startPage(pageNum,pageSize);//分页插件类的加载，它自动为下面的查询分页 pageNum是页码  pageSize是查询的数据数量  即每页多少
         List<Album> albums = albumMapper.query(albumQuery);//从数据库中查询满足条件的
         PageVue<Album> res = new PageVue<>(albums);//将我需要的数据封装到另一个自定义类中
 

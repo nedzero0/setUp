@@ -261,7 +261,7 @@ public class RecommController {
 
      //前端基于Vue写的
      //查询，分页   可以根据相册名称，类型或用户名称查询
-     @CrossOrigin(origins ="*",maxAge = 3600)
+     @CrossOrigin(origins ="*",maxAge = 3600) //跨域注解
      @GetMapping(value = "/pageVue")
      @ResponseBody
      public PageVue<Album> query(AlbumQuery albumQuery,

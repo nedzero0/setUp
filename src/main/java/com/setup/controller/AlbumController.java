@@ -1,10 +1,9 @@
 package com.setup.controller;
 
 import com.google.gson.Gson;
-import com.setup.entity.Album;
-import com.setup.entity.Image;
-import com.setup.entity.User;
+import com.setup.entity.*;
 import com.setup.service.AlbumService;
+import com.setup.service.CollectService;
 import com.setup.service.ImageService;
 import com.setup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,9 @@ public class AlbumController {
     private AlbumService albumService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private CollectService collectService;
+
     //添加相册
     @RequestMapping("/addAlbum")
     @ResponseBody
@@ -334,6 +336,31 @@ public class AlbumController {
         }
     }
 
+    /**
+     *查看收藏  删除收藏  添加收藏
+     * */
+
+    @PostMapping("/addCollect")
+    @ResponseBody
+    public void addCollect(Collect collect){
+       collectService.addCollect(collect);
+    }
+
+    //删除收藏
+    @GetMapping("/deleteCollect")
+    @ResponseBody
+    public void deleteCollect(Integer id){
+        collectService.deleteCollect(id);
+    }
+
+    //分页查询
+    @GetMapping("/page")
+    @ResponseBody
+    public PageVue<Album> page(@RequestParam(value = "uid") Integer uid,
+                                 @RequestParam(value = "pageSize") Integer pageSize,
+                                 @RequestParam(value = "pageNum") Integer pageNum){
+        return collectService.query(uid,pageSize,pageNum);
+    }
 
 
 }
