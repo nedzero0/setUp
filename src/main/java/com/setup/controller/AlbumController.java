@@ -272,6 +272,7 @@ public class AlbumController {
 
     /**
      * 下面是前端用vue重写的   后端也做出了调整
+     * 个人相册查看界面，收藏界面
      * **/
 
     //相册id
@@ -354,13 +355,17 @@ public class AlbumController {
     }
 
     //分页查询
-    @GetMapping("/page")
+    @CrossOrigin(origins ="*",maxAge = 3600) //跨域注解
+    @GetMapping("/pageCollect")
     @ResponseBody
-    public PageVue<Album> page(@RequestParam(value = "uid") Integer uid,
-                                 @RequestParam(value = "pageSize") Integer pageSize,
-                                 @RequestParam(value = "pageNum") Integer pageNum){
-        return collectService.query(uid,pageSize,pageNum);
+    public PageVue<Album> page(HttpSession session,
+                               @RequestParam(value = "albumName",required = false) String albumName,
+                               @RequestParam(value = "uid") Integer uid,
+                               @RequestParam(value = "pageSize") Integer pageSize,
+                               @RequestParam(value = "pageNum") Integer pageNum){
+   /*     User user = (User)session.getAttribute("user");
+*/
+        System.out.println(albumName);
+        return collectService.query(uid,pageSize,pageNum,albumName);
     }
-
-
 }

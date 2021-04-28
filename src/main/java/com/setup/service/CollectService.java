@@ -16,6 +16,6 @@ public interface CollectService {
     public void deleteCollect(Integer id);
 
     //查看收藏,根据用户id
-    public PageVue<Album> query(Integer uid, Integer pageSize, Integer pageNum);
+    public PageVue<Album> query(Integer uid, Integer pageSize, Integer pageNum,String albumName);
 
 }

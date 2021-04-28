@@ -190,7 +190,7 @@
         methods:{
             init(){
                 //设置前端传给后端的  json对象
-                const params = {...this.queryParams}
+                const params = {...this.queryParams};
                 params.pageSize = this.pageSize;
                 params.pageNum = this.pageNum;
 
@@ -198,7 +198,7 @@
                 console.log(params);
                 axios.get("http://localhost:8770/recomm/pageVue",{params:params})
                     .then(function (response) {
-                        /*that.devices = response.data;*/
+                        that.devices = response.data;
                         console.log(response)
                         console.log("成功")
                     },function (err) {

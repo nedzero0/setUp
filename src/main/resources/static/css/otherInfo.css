@@ -53,8 +53,8 @@
     margin-top: 20px;
 }
 .content-item{
-    width: 386px;
-    height: 546px;
+   /* width: 386px;
+    height: 546px;*/
     display: inline-block;
     position: relative;
     background-color: #92B8B1;

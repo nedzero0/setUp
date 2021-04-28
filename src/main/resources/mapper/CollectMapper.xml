@@ -16,11 +16,20 @@
     <select id="query" resultType="com.setup.entity.Album">
         SELECT *
         FROM album
-        WHERE aid IN(
-        select aid
-        FROM collect
-        where uid = #{uid}
-        )
+        <where>
+        <if test="uid != null and uid != ''">
+            AND aid IN(
+            select aid
+            FROM collect
+            where uid = #{uid}
+            )
+        </if>
+            <if test="albumName !=null and albumName!=''">
+                AND  a_name LIKE "%"#{albumName}"%"
+            </if>
+        </where>
+
+
     </select>
 
 

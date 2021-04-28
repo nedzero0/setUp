@@ -19,6 +19,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/own/changeHead.html");
         registry.addViewController("/own/album.html");
         registry.addViewController("/own/recycle.html");
+        registry.addViewController("/collect.html");
     }
 
     //静态资源文件夹映射

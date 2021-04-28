@@ -17,5 +17,5 @@ public interface CollectMapper {
     public void deleteCollect(Integer id);
 
     //查看收藏,根据用户id
-    public List<Album> query(Integer uid);
+    public List<Album> query(Integer uid,String albumName);
 }

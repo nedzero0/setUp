@@ -27,10 +27,10 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public PageVue<Album> query(Integer uid, Integer pageSize, Integer pageNum) {
+    public PageVue<Album> query(Integer uid, Integer pageSize, Integer pageNum,String albumName) {
         com.github.pagehelper.Page<Album> page = PageHelper.startPage(pageNum,pageSize);
         //查询出  收藏的相册信息
-        List<Album> list = collectMapper.query(uid);
+        List<Album> list = collectMapper.query(uid,albumName);
         PageVue<Album> res = new PageVue<>(list);
         res.setTotal(page.getTotal());
         return res;

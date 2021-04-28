@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>相册信息- Layui</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../static/css/backstage.css">
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <!--<script src="//unpkg.com/vue/dist/vue.js"></script>-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../static/css/otherInfo.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{own/commes :: topbar}"></div>
+    <div th:replace="~{own/commes :: sidebar}"></div>
+
+
+    <div class="layui-body" style="padding-left: 20px">
+        <div class="content">
+            <!--搜索框-->
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item>
+                    <el-input v-model="albumName" placeholder="相册名称"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" @click="onReset">重置</el-button>
+                </el-form-item>
+            </el-form>
+
+            <!-- 相册列表-->
+            <div class="content-list">
+                <!--单个相册div-->
+                <div class="content-item" v-for="item of collectList" :key="item">
+                    <a  target="_blank" style="width: 290px;height: 290px">
+                        <img :src="item.a_coverPath" style="height: 100%">
+                    </a>
+
+                    <div class="content-itemInfo">
+                        <span>相册时间</span>
+                        <p >相册名称</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+      <el-pagination
+            @size-change="onSizeChange"
+            @current-change="onCurrentChange"
+            :current-page="pageNum"
+            :page-sezes="pageSizes"
+            :page-size="pageSize"
+            layout="total,sizes,prev, pager, next"
+            :total="count">
+    </el-pagination>
+
+
+
+    </div>
+
+    <div th:replace="~{own/commes :: footbar}"></div>
+
+</div>
+
+
+<script src="../static/layui/layui.js"></script>
+<script src="../static/js/jquery-3.3.1.js"></script>
+
+<script>
+    var Main = {
+        data() {
+            return {
+              collectList:[],
+              queryParams: {
+
+              },
+              albumName:null,
+              pageNum:1,
+              pageSize:10,
+              count:null
+            }
+        },
+        mounted:function(){  //这方法相当于 页面初始化
+            this.init();
+        },
+        methods:{
+            init(){//拿到后台数据初始化
+                var that = this;
+                const params = {...this.queryParams};
+                params.uid = 13;
+                params.pageSize = this.pageSize;
+                params.pageNum = this.pageNum;
+                params.albumName = this.albumName;
+                console.log("sdfsdf");
+            console.log(params);
+                axios.get("http://localhost:8770/album/pageCollect",{params:params})
+                    .then(function (response) {
+                        that.collectList = response.data.list;
+                        that.count = response.data.total;
+                        console.log(that.collectList);
+                    },function (err) {
+                        console.log("出错")
+                    })
+
+            },
+            onSubmit(){
+                this.pageSize = 10;
+                this.pageNum = 1;
+                this.init();
+            },
+            onReset(){
+                this.pageSize = 10;
+                this.pageNum = 1;
+                this.albumName = null;
+                this.init();
+            }
+        }
+    }
+
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('.layui-body');
+</script>
+
+</body>
+</html>
