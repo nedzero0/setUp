@@ -54,19 +54,21 @@
             </div>
         </div>
 
-      <el-pagination
+
+        <div style="padding: 15px 0;text-align: right">
+           <el-pagination
             @size-change="onSizeChange"
             @current-change="onCurrentChange"
             :current-page="pageNum"
-            :page-sezes="pageSizes"
+            :page-sizes="pageSizes"
             :page-size="pageSize"
             layout="total,sizes,prev, pager, next"
             :total="count">
-    </el-pagination>
+           </el-pagination>
+        </div>
 
 
-
-    </div>
+</div>
 
     <div th:replace="~{own/commes :: footbar}"></div>
 
@@ -77,9 +79,12 @@
 <script src="../static/js/jquery-3.3.1.js"></script>
 
 <script>
+    const pageSizes=[1,2,3];  //设置每页数量 数组
+
     var Main = {
         data() {
             return {
+               pageSizes,
               collectList:[],
               queryParams: {
 
@@ -102,7 +107,7 @@
                 params.pageNum = this.pageNum;
                 params.albumName = this.albumName;
                 console.log("sdfsdf");
-            console.log(params);
+                console.log(params);
                 axios.get("http://localhost:8770/album/pageCollect",{params:params})
                     .then(function (response) {
                         that.collectList = response.data.list;
@@ -113,16 +118,24 @@
                     })
 
             },
-            onSubmit(){
+            onSubmit(){  //查询
                 this.pageSize = 10;
                 this.pageNum = 1;
                 this.init();
             },
-            onReset(){
+            onReset(){   //重置
                 this.pageSize = 10;
                 this.pageNum = 1;
                 this.albumName = null;
                 this.init();
+            },
+            onSizeChange(pageSize){
+                this.pageSize = pageSize
+                this.init()
+            },
+            onCurrentChange(pageNum){
+                this.pageNum = pageNum
+                this.init()
             }
         }
     }
