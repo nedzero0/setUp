@@ -22,6 +22,9 @@ public class Album {
       private String a_path;//相册路径
       private int a_status;//相册状态
 
+
+    private Integer id;//如果被收藏，收藏id
+
     public Album() {
 
     }
@@ -64,6 +67,14 @@ public class Album {
                 ", a_path='" + a_path + '\'' +
                 ", a_status=" + a_status +
                 '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public int getA_status() {

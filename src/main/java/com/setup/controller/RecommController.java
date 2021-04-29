@@ -102,6 +102,7 @@ public class RecommController {
 
 
     //根据推荐界面传来的相册 id 查询该相册的所有信息,和相册下的照片信息，和用户信息，评论信息
+    @CrossOrigin(origins ="*",maxAge = 3600) //跨域注解
     @RequestMapping(value = "/queryByAmID",method = RequestMethod.GET)
     public String queryByAmID(HttpSession session,@RequestParam int aid){
         //相册信息
@@ -259,8 +260,9 @@ public class RecommController {
      }
 
 
-     //前端基于Vue写的
+     /***前端基于Vue写的
      //查询，分页   可以根据相册名称，类型或用户名称查询
+      **/
      @CrossOrigin(origins ="*",maxAge = 3600) //跨域注解
      @GetMapping(value = "/pageVue")
      @ResponseBody

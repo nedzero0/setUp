@@ -341,16 +341,22 @@ public class AlbumController {
      *查看收藏  删除收藏  添加收藏
      * */
 
+    //相册是否被收藏
+
+
+    //添加收藏
     @PostMapping("/addCollect")
     @ResponseBody
     public void addCollect(Collect collect){
        collectService.addCollect(collect);
     }
 
-    //删除收藏
+    //取消收藏
     @GetMapping("/deleteCollect")
     @ResponseBody
     public void deleteCollect(Integer id){
+
+        System.out.println("id："+id);
         collectService.deleteCollect(id);
     }
 

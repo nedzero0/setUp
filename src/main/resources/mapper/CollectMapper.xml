@@ -14,18 +14,19 @@
     </delete>
 
     <select id="query" resultType="com.setup.entity.Album">
-        SELECT *
-        FROM album
+        SELECT ct.id,a.*
+        FROM album a,collect ct
         <where>
+            a.aid = ct.aid
         <if test="uid != null and uid != ''">
-            AND aid IN(
+            AND a.aid IN(
             select aid
             FROM collect
             where uid = #{uid}
             )
         </if>
             <if test="albumName !=null and albumName!=''">
-                AND  a_name LIKE "%"#{albumName}"%"
+                AND  a.a_name LIKE "%"#{albumName}"%"
             </if>
         </where>
 

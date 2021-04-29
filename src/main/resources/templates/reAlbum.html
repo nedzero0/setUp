@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>推荐的相册界面</title>
+    <title>推荐相册界面</title>
     <link rel="stylesheet" href="../static/layui/css/layui.css">
     <link rel="stylesheet" href="../static/css/backstage.css">
     <link rel="stylesheet" type="text/css" href="../static/search/css/normalize.css" />
@@ -13,6 +13,18 @@
     <link rel="stylesheet" href="../static/css/ablum.css">
     <script src="../static/js/jquery.min.js"></script>
     <script src="../static/js/pgwslideshow.js"></script>
+
+
+
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../static/css/otherInfo.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+
 </head>
 
 <body class="layui-layout-body">
@@ -105,7 +117,8 @@
        </div>
         <!--相册信息的描述-->
         <div class="cc_infobox">
-            <span id="album_id" style="display: none" th:text="${session.currentAlbum.getAid()}">相册id</span>
+            <input th:value="${session.currentAlbum.getAid()}" id="album-input" style="display: none"/>
+           <!-- <span id="album_id" th:text="${session.currentAlbum.getAid()}">相册id</span>-->
             <p th:text="${session.currentAlbum.getA_name()}">相册名称</p>
             <p>相册描述：<span th:text="${session.currentAlbum.getA_describe()}"></span></p>
             <p style="margin-top: 20px;font-size: 12px">
@@ -117,6 +130,8 @@
 
             <div style="margin-top: 10px">
                 <span>点赞数:32</span>
+                <span v-if=""></span>
+                <i class="el-icon-delete"></i>
                 <span>收藏数:300</span>
             </div>
         </div>
@@ -188,6 +203,52 @@
 
 <script src="../static/layui/layui.js" charset="utf-8"></script>
 
+<script>
+    var currentAid = document.getElementById("album-input").value;
+    console.log("aid是:"+currentAid);
+
+    var Main = {
+        data() {
+            return {
+                currentAid:null,
+                static:null,
+                describe:null,
+                aid:null
+            }
+        },
+        mounted:function () {
+              this.init();
+        },
+        methods:{
+            init(){
+                var that = this;
+                console.log("初始化开始判断该相册是否被收藏")
+              /*  axios.get("http://localhost:8770/album/pageCollect",{params:params})
+                    .then(function (response) {
+                        that.collectList = response.data.list;
+                        that.count = response.data.total;
+                        console.log(that.collectList);
+                    },function (err) {
+                        console.log("出错")
+                    })*/
+
+            },
+            addCollect(){
+
+            },
+            cancelCollect(){
+
+            }
+        }
+
+
+    }
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('.layui-layout-body');
+
+</script>
+
+
 <!--插入回复框-->
 <script type="text/javascript">
     $(function(){
@@ -218,13 +279,13 @@
                     "<a onclick='delRow()'>取消</a>"+
                     "</div>");
            /* 设置添加的div中input的值*/
-            $("#setValue1").val(name);
+            $("#setValue1").val(name);   //传过去的参数名是  targetName
             $("#setValue2").val(parent_id);
             $("#setValue3").val(album_id);
             $("#setValue4").val(userId);
         });
     });
-    /* 删除 */
+    /* 取消回复框 */
     function delRow() {
         $(".reply_textarea").remove();
     }

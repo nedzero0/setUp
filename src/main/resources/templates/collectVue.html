@@ -14,7 +14,30 @@
     <link rel="stylesheet" href="../static/css/otherInfo.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .list-right{
+            position: absolute;
+            top: 2px;
+            right: 3px;
+            color: #c8e1fa;
+            z-index: 1;
+            cursor: pointer;
+        }
+        .list-right-div{
+            display: none;
+        }
+        .list-right-div button{
+            border: none;
+            margin-bottom: 3px;
+            background-color: #c8e1fa;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .list-right:hover .list-right-div{
+            display: block;
+        }
 
+    </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -39,13 +62,25 @@
             <div class="content-list">
                 <!--单个相册div-->
                 <div class="content-item" v-for="item of collectList" :key="item">
-                    <a  target="_blank" style="width: 290px;height: 290px">
+                  <!-- 右上角菜单-->
+                    <div class="list-right">
+                        <span style="float: right">菜单</span>
+                        <br>
+                        <div class="list-right-div">
+                            <button  type="button" value="ww" @click="cancelAid(item.id)">取消收藏</button>
+                        </div>
+
+                    </div>
+                  <!--相册和跳转链接-->
+                    <a :href="'/recomm/queryByAmID?aid='+item.aid" target="_blank" style="width: 290px;height: 290px">
                         <img :src="item.a_coverPath" style="height: 100%">
                     </a>
 
+                    <!--相册信息-->
                     <div class="content-itemInfo">
-                        <span>相册时间</span>
-                        <p >相册名称</p>
+                        <span>名称{{item.a_name}}</span>
+                        <br>
+                        <span>描述： {{item.a_describe}}  </span>
                     </div>
 
                 </div>
@@ -55,7 +90,7 @@
         </div>
 
 
-        <div style="padding: 15px 0;text-align: right">
+        <div style="padding: 15px 0;text-align: center">
            <el-pagination
             @size-change="onSizeChange"
             @current-change="onCurrentChange"
@@ -79,7 +114,7 @@
 <script src="../static/js/jquery-3.3.1.js"></script>
 
 <script>
-    const pageSizes=[1,2,3];  //设置每页数量 数组
+    const pageSizes=[10,2,3];  //设置每页数量 数组
 
     var Main = {
         data() {
@@ -136,6 +171,27 @@
             onCurrentChange(pageNum){
                 this.pageNum = pageNum
                 this.init()
+            },
+            cancelAid(v){
+                var that = this;
+                this.$confirm('此操作将取消收藏, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.get("http://localhost:8770/album/deleteCollect?id="+v)
+                        .then(function (response) {
+                            that.pageNum = 1;
+                            that.init()
+                        },function (err) {
+                            console.log("出错")
+                        });
+                    this.$message({
+                        type: 'success',
+                        message: '取消收藏!'
+                    });
+                })
+
             }
         }
     }
