@@ -33,15 +33,55 @@ WHERE a.aid = #{aid}
 
     <!--更改相册信息-->
     <update id="updateAlbum">
-        update album set a_name = #{a_name},a_describe = #{a_describe}
-        ,a_authority = #{a_authority}
-        ,a_theme = #{a_theme},location = #{location} where aid = #{aid}
+        update album
+        <set>
+            <if test="a_name != null">
+                a_name = #{a_name},
+            </if>
+            <if test="a_describe != null">
+                a_describe = #{a_describe},
+            </if>
+            <if test="a_authority != null">
+                a_authority = #{a_authority},
+            </if>
+            <if test="a_theme != null">
+                a_theme = #{a_theme},
+            </if>
+            <if test="a_count != null">
+                a_count = #{a_count},
+            </if>
+            <if test="a_views != null">
+                a_views = #{a_views},
+            </if>
+            <if test="a_likes != null">
+                a_likes = #{a_likes},
+            </if>
+            <if test="a_stars != null">
+                a_stars = #{a_stars},
+            </if>
+            <if test="a_assess != null">
+                a_assess = #{a_assess},
+            </if>
+            <if test="coordinate != null">
+                coordinate = #{coordinate},
+            </if>
+            <if test="location != null">
+                location = #{location},
+            </if>
+            <if test="a_path != null">
+                a_path = #{a_path},
+            </if>
+            <if test="a_status != null">
+                a_status = #{a_status},
+            </if>
+        </set>
+        where aid = #{aid}
     </update>
     <!--查找一个相册-->
-   <!-- <select id="queryOneAlbum" resultType="com.setup.entity.Album">
-        select * from album where aid = #{aid};
-    </select>
--->
+    <!-- <select id="queryOneAlbum" resultType="com.setup.entity.Album">
+         select * from album where aid = #{aid};
+     </select>
+ -->
 
     <!--查看原相册的状态是否为1,根据图片的i_id-->
     <select id="queryOldAlbum" resultType="com.setup.entity.Album">
@@ -68,8 +108,12 @@ SELECT aid FROM image WHERE i_id = #{i_id}
             </if>
             and a.a_status = 1 and a.a_authority = 2
         </where>
+    </select>
 
-
+    <select id="queryAlbumByAid"  resultType="com.setup.entity.Album">
+           select *
+        from album
+        where aid = #{aid}
     </select>
 
 </mapper>

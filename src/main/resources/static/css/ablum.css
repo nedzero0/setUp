@@ -33,7 +33,7 @@
 .cc_infobox{
     margin-left: 30px;
     margin-top: 20px;
-    background-color: #00FFFF;
+   /* background-color: #00FFFF;*/
 
 }
 .cc_comment__textarea textarea{

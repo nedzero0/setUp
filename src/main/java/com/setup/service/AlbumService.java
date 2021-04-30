@@ -1,6 +1,7 @@
 package com.setup.service;
 
 import com.setup.entity.Album;
+import com.setup.entity.AlbumQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,5 +24,12 @@ public interface AlbumService {
     public Album queryOldAlbum(String i_id);
     //还原相册状态为1
     public int updateStatus(int aid);
+
+
+    //Vue  分页查询
+    public List<Album> query(AlbumQuery albumQuery);
+    //根据aid查找相册
+    public Album queryAlbumByAid(Integer aid);
+
 
 }

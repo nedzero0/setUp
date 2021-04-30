@@ -2,6 +2,7 @@ package com.setup.controller;
 
 import com.google.gson.Gson;
 import com.setup.entity.*;
+import com.setup.mapper.RecommendMapper;
 import com.setup.service.AlbumService;
 import com.setup.service.CollectService;
 import com.setup.service.ImageService;
@@ -35,6 +36,7 @@ public class AlbumController {
     private ImageService imageService;
     @Autowired
     private CollectService collectService;
+
 
     //添加相册
     @RequestMapping("/addAlbum")
@@ -342,25 +344,43 @@ public class AlbumController {
      * */
 
     //相册是否被收藏
-
+    @GetMapping("/ifCollent")
+    @ResponseBody
+    public Collect ifCollent(@RequestParam(value = "aid",required = false) Integer aid,
+                             @RequestParam(value = "uid",required = false) Integer uid){
+        System.out.println(aid+"钉钉："+uid);
+        return collectService.ifCollect(uid, aid);
+    }
 
     //添加收藏
-    @PostMapping("/addCollect")
+    @GetMapping("/addCollect")
     @ResponseBody
-    public void addCollect(Collect collect){
-       collectService.addCollect(collect);
+    public void addCollect(HttpSession session,Collect collect){
+        System.out.println("collect是："+collect);
+        //插入收藏表
+        collectService.addCollect(collect);
+        //更新相册收藏信息
+        Album currentAlbum = (Album)session.getAttribute("currentAlbum");
+        currentAlbum.setA_stars(currentAlbum.getA_stars()+1);
+        int i = albumService.updateAlbum(currentAlbum);
     }
 
     //取消收藏
     @GetMapping("/deleteCollect")
     @ResponseBody
-    public void deleteCollect(Integer id){
-
+    public void deleteCollect(HttpSession session,Integer id,Integer aid){
         System.out.println("id："+id);
+        System.out.println("aid："+aid);
+        //更新数据库收藏个数信息
+        //找到该相册并更新
+        Album album = albumService.queryAlbumByAid(aid);
+        album.setA_stars(album.getA_stars()-1);
+        albumService.updateAlbum(album);
+        //删除收藏表信息
         collectService.deleteCollect(id);
     }
 
-    //分页查询
+    //分页查询收藏的相册
     @CrossOrigin(origins ="*",maxAge = 3600) //跨域注解
     @GetMapping("/pageCollect")
     @ResponseBody

@@ -35,4 +35,14 @@ public class CollectServiceImpl implements CollectService {
         res.setTotal(page.getTotal());
         return res;
     }
+
+    @Override
+    public Collect ifCollect(Integer uid, Integer aid) {
+        Collect collect = collectMapper.ifCollect(uid, aid);
+        System.out.println(collect);
+        if (collect == null){
+            return new Collect();
+        }
+        return collect;
+    }
 }

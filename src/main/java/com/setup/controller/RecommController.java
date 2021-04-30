@@ -123,7 +123,7 @@ public class RecommController {
         session.setAttribute("comments",comments);*/
 
         List<Comment> allComments = commentMapper.queryComment(aid);
-        System.out.println("全部:"+allComments);
+        /*System.out.println("全部:"+allComments);*/
         List<Comment> parents = new ArrayList<>();//最终排好的评论，返回的
         //做成层级评论
         for (Comment comment:allComments){
@@ -143,7 +143,7 @@ public class RecommController {
               }
             }
         }
-        System.out.println(parents);
+    /*    System.out.println(parents);*/
         session.setAttribute("comments",parents);
 
 

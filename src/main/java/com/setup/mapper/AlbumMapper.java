@@ -32,5 +32,8 @@ public interface AlbumMapper {
      //Vue  分页查询
      public List<Album> query(AlbumQuery albumQuery);
 
+     //根据aid查找相册
+     public Album queryAlbumByAid(Integer aid);
+
 
 }

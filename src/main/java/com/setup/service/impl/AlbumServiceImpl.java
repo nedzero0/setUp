@@ -1,6 +1,7 @@
 package com.setup.service.impl;
 
 import com.setup.entity.Album;
+import com.setup.entity.AlbumQuery;
 import com.setup.mapper.AlbumMapper;
 import com.setup.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,15 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public int updateStatus(int aid) {
         return albumMapper.updateStatus(aid);
+    }
+
+    @Override
+    public List<Album> query(AlbumQuery albumQuery) {
+        return null;
+    }
+
+    @Override
+    public Album queryAlbumByAid(Integer aid) {
+        return albumMapper.queryAlbumByAid(aid);
     }
 }

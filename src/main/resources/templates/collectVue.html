@@ -43,6 +43,7 @@
 <div class="layui-layout layui-layout-admin">
     <div th:replace="~{own/commes :: topbar}"></div>
     <div th:replace="~{own/commes :: sidebar}"></div>
+    <input id="userID" th:value="${session.user.getUid()}" style="display: none"/>
 
 
     <div class="layui-body" style="padding-left: 20px">
@@ -67,7 +68,7 @@
                         <span style="float: right">菜单</span>
                         <br>
                         <div class="list-right-div">
-                            <button  type="button" value="ww" @click="cancelAid(item.id)">取消收藏</button>
+                            <button  type="button" value="ww" @click="cancelAid(item.id,item.aid)">取消收藏</button>
                         </div>
 
                     </div>
@@ -114,6 +115,9 @@
 <script src="../static/js/jquery-3.3.1.js"></script>
 
 <script>
+    var userID= document.getElementById("userID").value;
+    console.log("当前用户id是:"+userID);
+
     const pageSizes=[10,2,3];  //设置每页数量 数组
 
     var Main = {
@@ -137,7 +141,7 @@
             init(){//拿到后台数据初始化
                 var that = this;
                 const params = {...this.queryParams};
-                params.uid = 13;
+                params.uid = userID;
                 params.pageSize = this.pageSize;
                 params.pageNum = this.pageNum;
                 params.albumName = this.albumName;
@@ -172,14 +176,14 @@
                 this.pageNum = pageNum
                 this.init()
             },
-            cancelAid(v){
+            cancelAid(v,v1){
                 var that = this;
                 this.$confirm('此操作将取消收藏, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.get("http://localhost:8770/album/deleteCollect?id="+v)
+                    axios.get("http://localhost:8770/album/deleteCollect?id="+v+"&aid="+v1)
                         .then(function (response) {
                             that.pageNum = 1;
                             that.init()

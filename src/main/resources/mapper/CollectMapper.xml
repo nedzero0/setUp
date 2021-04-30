@@ -29,9 +29,12 @@
                 AND  a.a_name LIKE "%"#{albumName}"%"
             </if>
         </where>
-
-
     </select>
 
+    <select id="ifCollect" resultType="com.setup.entity.Collect">
+        SELECT *
+        FROM collect
+        WHERE uid=#{uid} AND aid=#{aid}
+    </select>
 
 </mapper>

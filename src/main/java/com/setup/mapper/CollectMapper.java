@@ -18,4 +18,7 @@ public interface CollectMapper {
 
     //查看收藏,根据用户id
     public List<Album> query(Integer uid,String albumName);
+
+    //判断相册是否被收藏,返回收藏类
+    public Collect ifCollect(Integer uid,Integer aid);
 }
