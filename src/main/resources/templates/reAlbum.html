@@ -108,7 +108,7 @@
        <div class="cc_user_item">
            <span>
                    <a th:href="@{'/recomm/intoOtherView?otherUid='+${session.otherUser.getUid()}}" target="_blank">
-                    <img th:src="'/' + ${session.otherUser.getProfile_photo()}" class="layui-nav-img">
+                    <img th:src="'/' + ${session.otherUser.getProfile_photo()}" class="layui-nav-img" style="object-fit: cover">
                     <span th:text="${session.otherUser.getUsername()}" >姓名</span>
                        <p th:text="${session.otherUser.getAutograph()}">个性签名</p>
                 </a>

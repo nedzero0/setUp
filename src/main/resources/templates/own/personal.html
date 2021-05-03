@@ -15,7 +15,7 @@
     <div class="layui-body" style="padding-left: 20px">
         <!-- 内容主体区域 -->
         <div style="margin-top: 20px;margin-bottom: 30px">
-            <button type="button" class="layui-btn layui-btn-normal">上传照片/视频</button>
+           <!-- <button type="button" class="layui-btn layui-btn-normal">上传照片/视频</button>-->
             <button id="cr_albums" type="button" data-method="setTop" class="layui-btn layui-btn-normal addBu">创建相册</button>
 
        </div>
@@ -30,15 +30,15 @@
                                 <a th:href="@{'/album/queryAidVue?id=' + ${ablbum.getAid()}+ '&index=' + ${ablbumStat.index}}">
                                     <!--<img src="../../static/images/2.jpg">-->
                                     <img th:src="${ablbum.getA_coverPath()}!=null ?${ablbum.getA_coverPath()}:'../../static/images/2.jpg'">
-                                    <span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}">1111</span>
+                                    <!--<span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}">1111</span>-->
                                 </a>
                                 <div class="album-edit" style="position: absolute;top: 2px;right: 3px">
                                     <div class="dropdown">
                                         <button class="dropbtn">菜单</button>
                                         <div class="dropdown-content">
-                                            <a href="#"><button  type="button"  th:name="${ablbumStat.index}" th:value="${ablbumStat.index}" data-method="updateTop" class="layui-btn layui-btn-normal updateBu">编辑相册</button></a>
-                                            <a href="#"><button  type="button" th:value="${ablbum.getAid()}"  data-method="delTop" class="layui-btn layui-btn-normal delBu">删除相册</button></a>
-                                            <span th:text="${ablbumStat.index}"></span>
+                                            <a href="#"><button  type="button"  th:name="${ablbumStat.index}" th:value="${ablbumStat.index}" data-method="updateTop" class="layui-btn layui-btn-normal updateBu" style="height: auto;line-height: normal;padding: 0 0;background-color: #c8e1fa;color: #0C0C0C">编辑相册</button></a>
+                                            <a href="#"><button  type="button" th:value="${ablbum.getAid()}"  data-method="delTop" class="layui-btn layui-btn-normal delBu" style="height: auto;line-height: normal;padding: 0 0;background-color: #c8e1fa;color: #0C0C0C">删除相册</button></a>
+                                           <!-- <span th:text="${ablbumStat.index}"></span>-->
                                         </div>
                                     </div>
                                 </div>

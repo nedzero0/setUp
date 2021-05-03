@@ -108,7 +108,7 @@
                 <li class="admin" th:each="albums,albumsStat : ${session.re_albums}">
                     <div class="admin_div1">
                         <a th:href="@{/recomm/queryByAmID(aid=${albums.getAid()})}" target="_blank">
-                           <img src="../static/images/2.jpg" style="overflow: hidden">
+                           <img th:src="${albums.getA_coverPath()}!=null ?${albums.getA_coverPath()}:'../static/images/2.jpg'" style="overflow: hidden">
                         </a>
                         <span th:text="${albums.getA_name()}"></span>
                     </div>
@@ -145,7 +145,7 @@
            <span>
 
            <form action="http://localhost:8770/recomm/queryTag">
-               <input type="text" name="name" th:value="${session.page.name}" style="display: none">
+               <input type="text" name="name" th:value="${session.page.name}!=null ?${session.page.name}:'全部'" style="display: none">
                   <input type="text" name="start"/>
                <input type="submit" value="跳转">
            </form>

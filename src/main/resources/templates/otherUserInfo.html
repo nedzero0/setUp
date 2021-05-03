@@ -89,7 +89,7 @@
         <!--单个相册div-->
         <div class="content-item" th:each="otherAlbum : ${session.otherAlbums}">
          <a th:href="@{/recomm/queryByAmID(aid=${otherAlbum.getAid()})}" target="_blank">
-             <img src="../static/images/27.jpg" style="height: 100%">
+             <img th:src="${otherAlbum.getA_coverPath()}!=null ?${otherAlbum.getA_coverPath()}:'../static/images/27.jpg'" style="height: 100%">
          </a>
 
             <div class="content-itemInfo">

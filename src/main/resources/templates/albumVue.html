@@ -79,9 +79,9 @@
 
                         <div class="lists" style="overflow: auto">
 
-                            <p>{{vals}}</p>
+                           <!-- <p>{{vals}}</p>-->
                             <!--关键的HTML代码部分开始了-->
-                            <div class="list" v-for="item of drawerTableList" :key="item" style="position:relative;">
+                            <div class="list" v-for="item of drawerTableList" :key="item" style="position:relative;margin-bottom: 10px">
                                 <!--这个是可以勾选照片，以便后面删除功能的实现-->
                                 <td><input class="lists-value" type="checkbox" v-model="vals" :value="item.id"></td>
 
