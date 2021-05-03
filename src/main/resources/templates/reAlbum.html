@@ -129,14 +129,15 @@
             </p>
 
             <div style="margin-top: 10px">
-               <!-- 盖章 ==  点赞-->
-                <span style="cursor:pointer;">
-                    <i class="el-icon-s-check"></i>
-                </span>
-                <span style="cursor:pointer;">  <!--成功盖章-->
+               <!--点赞  ==  盖章 -->
+                <span style="cursor:pointer;" v-if="staticL" @click="cancelLikes()">
                     <i class="el-icon-s-check" style="color:crimson"></i>
                 </span>
-                <span>:32</span>
+                <span style="cursor:pointer;" v-else @click="addLikes()">
+                    <i class="el-icon-s-check"></i>
+                </span>
+
+                <span>点赞<i th:text="${session.currentAlbum.getA_likes()}"></i></span>
 
 
               <!--  收藏-->
@@ -233,7 +234,12 @@
             return {
                 static:null,//状态 是否被该用户收藏   true收藏  false不收藏
                 count:null,  //收藏数量
-                collect:null  //接收  收藏类的信息 即 id  aid uid
+                collect:null,  //接收  收藏类的信息 即 id  aid uid
+
+                staticL:null,//点赞 状态
+                countL:null,//点赞 数量
+                likes:null   //点赞类
+
             }
         },
         mounted:function () {
@@ -245,7 +251,7 @@
                 console.log("初始化开始判断该相册是否被收藏");
                 axios.get("http://localhost:8770/album/ifCollent",{params:param})
                     .then(function (response) {
-                        console.log("判断：");
+                        console.log("判断Collect：");
                         console.log(response.data);
                         that.collect = response.data;
                         if (response.data.id == null){
@@ -253,6 +259,22 @@
                         }
                         else {
                             that.static=true;
+                        }
+                    },function (err) {
+                        console.log("出错")
+                    })
+
+                console.log("初始化开始判断该相册是否被点赞");
+                axios.get("http://localhost:8770/album/ifLikes",{params:param})
+                    .then(function (response) {
+                        console.log("判断Likes：");
+                        that.likes = response.data;
+                        console.log(that.likes);
+                        if (response.data.id == null){
+                            that.staticL=false;
+                        }
+                        else {
+                            that.staticL=true;
                         }
                     },function (err) {
                         console.log("出错")
@@ -269,6 +291,10 @@
                 else {
                     axios.get("http://localhost:8770/album/addCollect",{params:param})
                         .then(function (response) {
+                            that.$message({
+                                message: '恭喜你，收藏成功',
+                                type: 'success'
+                            });
                             location.reload();
                         },function (err) {
                             console.log("出错")
@@ -280,7 +306,43 @@
                 console.log("取消收藏");
                 axios.get("http://localhost:8770/album/deleteCollect?id="+this.collect.id+"&aid="+this.collect.aid)
                     .then(function (response) {
-                        console.log("取消收藏成功")
+                        that.$message({
+                            message: '取消点赞',
+                            type: 'success'
+                        });
+                        location.reload();
+                    },function (err) {
+                        console.log("出错")
+                    })
+            },
+            addLikes(){
+                var that = this;
+                console.log("添加点赞");
+                //先判断用户是否登录
+                if (userID==0){
+                    alert("请先登录")
+                }
+                else {
+                    axios.get("http://localhost:8770/album/addLikes",{params:param})
+                        .then(function (response) {
+                            that.$message({
+                                message: '恭喜你，点赞成功',
+                                type: 'success'
+                            });
+                            location.reload();
+                        },function (err) {
+                            console.log("出错")
+                        })
+                }
+            },
+            cancelLikes(){
+                console.log("取消点赞");
+                axios.get("http://localhost:8770/album/deleteLikes?id="+this.likes.id+"&aid="+this.likes.aid)
+                    .then(function (response) {
+                        that.$message({
+                            message: '取消点赞',
+                            type: 'success'
+                        });
                         location.reload();
                     },function (err) {
                         console.log("出错")

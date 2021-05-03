@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--上面的是映射文件头-->
+<mapper namespace="com.setup.mapper.LikesMapper">
+    <insert id="addLikes" parameterType="com.setup.entity.Likes">
+        insert into likes(uid,aid)
+        values (#{uid},#{aid})
+    </insert>
+
+    <delete id="deleteLikes">
+        delete from likes
+        where id = #{id}
+    </delete>
+
+    <select id="ifLikes" resultType="com.setup.entity.Likes">
+        SELECT *
+        FROM likes
+        WHERE uid=#{uid} AND aid=#{aid}
+    </select>
+
+</mapper>

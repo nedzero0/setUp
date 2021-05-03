@@ -3,10 +3,7 @@ package com.setup.controller;
 import com.google.gson.Gson;
 import com.setup.entity.*;
 import com.setup.mapper.RecommendMapper;
-import com.setup.service.AlbumService;
-import com.setup.service.CollectService;
-import com.setup.service.ImageService;
-import com.setup.service.UserService;
+import com.setup.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +33,8 @@ public class AlbumController {
     private ImageService imageService;
     @Autowired
     private CollectService collectService;
-
+    @Autowired
+    private LikesService likesService;
 
     //添加相册
     @RequestMapping("/addAlbum")
@@ -394,4 +392,49 @@ public class AlbumController {
         System.out.println(albumName);
         return collectService.query(uid,pageSize,pageNum,albumName);
     }
+
+
+
+    /**
+     *取消点赞  添加点赞
+     * */
+
+    //相册是否被点赞
+    @GetMapping("/ifLikes")
+    @ResponseBody
+    public Likes ifLikes(@RequestParam(value = "aid",required = false) Integer aid,
+                             @RequestParam(value = "uid",required = false) Integer uid){
+        System.out.println(aid+"钉钉："+uid);
+        return likesService.ifLikes(uid,aid);
+    }
+
+
+    //添加点赞
+    @GetMapping("/addLikes")
+    @ResponseBody
+    public void addLikes(HttpSession session,Likes likes){
+        System.out.println("Likes是："+likes);
+        //插入点赞表
+        likesService.addLikes(likes);
+        //更新相册点赞信息
+        Album currentAlbum = (Album)session.getAttribute("currentAlbum");
+        currentAlbum.setA_likes(currentAlbum.getA_likes()+1);
+        int i = albumService.updateAlbum(currentAlbum);
+    }
+
+    //取消点赞
+    @GetMapping("/deleteLikes")
+    @ResponseBody
+    public void deleteLikes(HttpSession session,Integer id,Integer aid){
+        System.out.println("id："+id);
+        System.out.println("aid："+aid);
+        //更新数据库点赞个数信息
+        //找到该相册并更新
+        Album album = albumService.queryAlbumByAid(aid);
+        album.setA_likes(album.getA_likes()-1);
+        albumService.updateAlbum(album);
+        //删除点赞表信息
+        likesService.deleteLikes(id);
+    }
+
 }

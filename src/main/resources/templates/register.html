@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
 <title>注册页面</title>
 <link href="../static/css/style.css" rel="stylesheet" type="text/css" media="all"/>
@@ -26,24 +26,25 @@
 		<h1>Login Form</h1>
 		 <div class="alert-close"> </div> 			
 	</div>
+	<!--form添加地址-->
 		<form action="/user/register" method="post">
 			<li>
 				<input type="text" name="UserName" class="text" value="UserName" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'UserName';}">
 			</li>
 
 			<li>
-				<input type="text" name="UserPhone" class="text" value="UserPhone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Phone';}"><a href="#" class=" icon user"></a>
+				<input type="text" name="UserPhone" class="text" value="UserPhone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Phone';}"><!--<a href="#" class=" icon user"></a>-->
 			</li>
 				<div class="clear"> </div>
 			<li>
-				<input type="password" name="Password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
+				<input type="password" name="Password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <!--<a href="#" class="icon lock"></a>-->
 			</li>
 
-			<li>
+		<!--	<li>
 				<input type="text" name="Code" value="Code" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Code';}">
 			</li>
-
-			<div class="clear"> </div>
+-->
+			<div class="clear" th:text="${session.registerErr}!=null ?${session.registerErr}:''" style="color: red"> </div>
 			<div class="submit">
 				<input type="submit" onclick="myFunction()" value="Register in" >
 						  <div class="clear">  </div>	

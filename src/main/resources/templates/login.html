@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
 <title>登陆页面</title>
 <link href="../static/css/style.css" rel="stylesheet" type="text/css" media="all"/>
@@ -26,18 +26,21 @@
 		<h1>Login Form</h1>
 		 <div class="alert-close"> </div> 			
 	</div>
+	<!--form添加地址-->
 		<form action="/user/login" method="post">
+
 			<li>
+
 				<input type="text" name="UserPhone" class="text" value="UserPhone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Phone';}"><a href="#" class=" icon user"></a>
 			</li>
 				<div class="clear"> </div>
 			<li>
 				<input type="password" name="Password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
 			</li>
-			<div class="clear"> </div>
+			<div class="clear" th:text="${session.loginErr}!=null ?${session.loginErr}:''" style="color: red"> </div>
 			<div class="submit">
 				<input type="submit" onclick="myFunction()" value="Sign in" >
-				<h4><a href="#">Lost your Password ?</a></h4>
+				<h4><a href="http://localhost:8770/user/getRegister">Register</a></h4>
 						  <div class="clear">  </div>	
 			</div>
 				

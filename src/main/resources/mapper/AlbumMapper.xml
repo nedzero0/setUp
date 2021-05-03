@@ -3,11 +3,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--上面的是映射文件头-->
 <mapper namespace="com.setup.mapper.AlbumMapper">
-
+   <!-- /*insert into album(uid,a_name,a_createTime,a_describe,a_authority,a_path)
+    values (#{uid},#{a_name},#{a_createTime},#{a_describe},#{a_authority},#{a_path})*/
+-->
     <!--创建相册-->
     <insert id="insertAlbum" parameterType="com.setup.entity.Album">
-        insert into album(uid,a_name,a_createTime,a_describe,a_authority,a_path)
-        values (#{uid},#{a_name},#{a_createTime},#{a_describe},#{a_authority},#{a_path})
+        insert into album(uid,a_name,a_createTime,
+        <if test="a_describe !=null and a_describe!=''">
+            a_describe,
+        </if>
+        a_authority,a_path
+        )
+        values (#{uid},#{a_name},#{a_createTime},
+        <if test="a_describe !=null and a_describe!=''">
+            #{a_describe},
+        </if>
+        #{a_authority},#{a_path})
+
+
     </insert>
     <!--查找所有相册，状态为1的-->
     <select id="queryAlbum" resultType="com.setup.entity.Album">

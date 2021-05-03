@@ -29,7 +29,7 @@
                               <!--  <a th:href="@{'/album/queryAlbum?aid=' + ${ablbum.getAid()} + '&index=' + ${ablbumStat.index}}">-->
                                 <a th:href="@{'/album/queryAidVue?id=' + ${ablbum.getAid()}+ '&index=' + ${ablbumStat.index}}">
                                     <!--<img src="../../static/images/2.jpg">-->
-                                    <img th:src="${ablbum.getA_coverPath()}">
+                                    <img th:src="${ablbum.getA_coverPath()}!=null ?${ablbum.getA_coverPath()}:'../../static/images/2.jpg'">
                                     <span style="bottom: 0px;right: 1px" th:text="${ablbum.getA_count}">1111</span>
                                 </a>
                                 <div class="album-edit" style="position: absolute;top: 2px;right: 3px">

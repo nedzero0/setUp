@@ -1,6 +1,7 @@
 package com.setup.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -64,12 +68,15 @@ public class UserController {
             session.setAttribute("reImages",images);
 
           //添加头像路径  /  是浏览器默认路径
-            session.setAttribute("headName","/"+user.getProfile_photo());
+            if (user.getProfile_photo()!=null){
+                session.setAttribute("headName","/"+user.getProfile_photo());
+            }
 
             System.out.println("登录成功");
             return "redirect:/own/personal.html";
         }else {
-            System.out.println("登录失败,电话或密码错误");
+            System.out.println("登录失败,账户或密码错误");
+            session.setAttribute("loginErr","登录失败,账户或密码错误");
             return "redirect:/login.html";
         }
     }
@@ -81,7 +88,7 @@ public class UserController {
 
     //注册
     @RequestMapping("/register")
-    public String register(String UserName,String UserPhone, String Password){
+    public String register(String UserName,String UserPhone, String Password,HttpSession session){
         System.out.println("注册中");
         User user = new User(UserName,UserPhone,Password);
         //System.out.println(user);
@@ -92,9 +99,12 @@ public class UserController {
             User user2 = userService.signIn(UserPhone, Password);
             String str = String.valueOf(user2.getUid());
             addAlbum.addOriginal(str);
+            //加入默认相册加入数据库
+            defaultAlbum(user2.getUid(),UserName);
             return "redirect:/login.html";
         }else {
             System.out.println("用户名或电话已被注册");
+            session.setAttribute("registerErr","用户名或电话已被注册");
             return "redirect:/register.html";
         }
 
@@ -179,6 +189,29 @@ public class UserController {
     }
 
 
+
+
+    //默认相册
+    public void defaultAlbum(Integer uid,String userName){
+        Album album = new Album();
+        album.setUid(uid);
+        album.setA_name("默认相册");
+        album.setA_authority(1);
+        //获取时间
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        String dateName = df.format(calendar.getTime());
+        album.setA_createTime(dateName);
+        //创建路径
+        File dest = new File("D://setUp//"+uid+"//default");
+        if (!dest.exists()){
+            dest.mkdir();
+        }
+        //System.out.println(dest);
+        album.setA_path(uid+"//default");
+        //System.out.println(album);
+        albumService.insertAlbum(album);
+    }
 
 
 }
