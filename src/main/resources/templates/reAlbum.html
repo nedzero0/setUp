@@ -31,36 +31,6 @@
 
 <div class="layui-layout layui-layout-admin">
 
-    <!--<div class="layui-header">
-        <div class="layui-logo">layui 管理布局</div>
-        &lt;!&ndash; 头部区域（可配合layui已有的水平导航） &ndash;&gt;
-        <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="">控制台</a></li>
-            <li class="layui-nav-item"><a href="">商品管理</a></li>
-            <li class="layui-nav-item"><a href="">用户</a></li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">其它系统</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">邮件管理</a></dd>
-                    <dd><a href="">消息管理</a></dd>
-                    <dd><a href="">授权管理</a></dd>
-                </dl>
-            </li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item">
-                <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    贤心
-                </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item"><a href="">退了</a></li>
-        </ul>
-    </div>-->
     <div th:replace="~{own/commes :: topbar}"></div>
     <input id="userID" th:value="${session.user}!=null ?${session.user.getUid()}:'0'" style="display: none"/>
 
@@ -73,17 +43,6 @@
 
 
         <ul class="pgwSlideshow">
-            <!--<li><img src="../static/images/san-francisco.jpg" alt="San Francisco, USA" data-description="Golden Gate Bridge"></li>
-            <li><img src="../static/images/2.jpg" alt="Rio de Janeiro, Brazil"></li>
-            <li><img src="../static/images/london.jpg" alt=""></li>
-            <li><img src="../static/images/new-york.jpg" alt=""></li>
-            <li><img src="../static/images/new-delhi.jpg" alt=""></li>
-            <li><img src="../static/images/paris.jpg" alt=""></li>
-            <li><img src="../static/images/sydney.jpg" alt=""></li>
-            <li><img src="../static/images/tokyo.jpg" alt=""></li>
-            <li><img src="../static/images/honk-kong.jpg" alt=""></li>
-            <li><img src="../static/images/dakar.jpg" alt=""></li>
-            <li><img src="../static/images/toronto.jpg" alt=""></li>-->
 
             <li th:each="image,imageStat : ${session.currentImages}">
                 <img th:src="'/' + ${image.getI_path()}" alt="">
@@ -97,8 +56,9 @@
         </ul>
        </div>
 
-        <div class="cc_leftBM" style="width: 100%;height: 600px;background-color: hotpink">
-12
+        <div class="cc_leftBM" style="width: 100%;height: 60px;/*background-color: hotpink*/
+	filter: blur(20px);">
+
         </div>
 
     </div>
@@ -109,8 +69,8 @@
            <span>
                    <a th:href="@{'/recomm/intoOtherView?otherUid='+${session.otherUser.getUid()}}" target="_blank">
                     <img th:src="'/' + ${session.otherUser.getProfile_photo()}" class="layui-nav-img" style="object-fit: cover">
-                    <span th:text="${session.otherUser.getUsername()}" >姓名</span>
-                       <p th:text="${session.otherUser.getAutograph()}">个性签名</p>
+                    <span th:text="${session.otherUser.getUsername()}" style="color: white">姓名</span>
+                       <p th:text="${session.otherUser.getAutograph()}" style="font-size: 13px;padding-left: 39px;color: white">个性签名</p>
                 </a>
            </span>
            <button>关注</button>
@@ -119,13 +79,13 @@
         <div class="cc_infobox">
             <input th:value="${session.currentAlbum.getAid()}" id="album-input" style="display: none"/>
            <!-- <span id="album_id" th:text="${session.currentAlbum.getAid()}">相册id</span>-->
-            <p th:text="${session.currentAlbum.getA_name()}">相册名称</p>
-            <p>相册描述：<span th:text="${session.currentAlbum.getA_describe()}"></span></p>
+            <p><span th:text="${session.currentAlbum.getA_name()}"></span></p>
+            <p>描述:<span th:text="${session.currentAlbum.getA_describe()}" style="font-size: 13px"></span></p>
             <p style="margin-top: 20px;font-size: 12px">
                 <span>创建日期：</span>
                 <span th:text="${session.currentAlbum.getA_createTime()}">2020-01-12</span>
-                <span>浏览人数:<span th:text="${session.currentAlbum.getA_views()}"></span></span>
-                <span>主题:<span th:text="${session.currentAlbum.getA_theme()}"></span></span>
+            <!--    <span>浏览人数:<span th:text="${session.currentAlbum.getA_views()}"></span></span>-->
+                <span style="margin-left: 10px">主题:<span th:text="${session.currentAlbum.getA_theme()}"></span></span>
             </p>
 
             <div style="margin-top: 10px">
@@ -151,7 +111,7 @@
             </div>
         </div>
         <!--评论信息-->
-        <div class="cc_comment" style="margin-left: 30px;margin-top: 30px">
+        <div class="cc_comment" style="padding-left: 30px;margin-top: 30px;background-color: #242424">
 
 
             <h5>评论区</h5>
@@ -171,7 +131,7 @@
 
             <!--评论列表-->
             <div class="cc_comments">
-              <div class="cc_comment_list"  th:each="comment,commentStat : ${session.comments}"  style="background-color: #92B8B1;margin-bottom: 20px">
+              <div class="cc_comment_list"  th:each="comment,commentStat : ${session.comments}"  style="margin-bottom: 20px">
                 <div class="cc_comment_part">
 
                         <a style="position:absolute;">
@@ -179,12 +139,12 @@
                         </a>
                         <div style="margin-left: 40px">
 
-                            <span th:text="${comment.getUsername()}"></span>
+                            <span th:text="${comment.getUsername()}" style="color: #999;font-size: 12px"></span>
                             <div th:text="${comment.getC_content()}"></div>
-                            <span th:text="${comment.getC_time()}" style="font-size: 10px"></span>
+                            <span th:text="${comment.getC_time()}" style="font-size: 10px;color: #999"></span>
                             <!--父评论id，即该楼层发起者的id-->
                             <p style="display: none" th:text="${comment.getC_id()}"></p>
-                            <a href="javascript:;" class="reply_btn" >回复</a>
+                            <a href="javascript:;" class="reply_btn" style="color: #999;font-size: 12px">回复</a>
                         </div>
                     
                     <!--子评论-->
@@ -195,13 +155,13 @@
                             </a>
                             <div style="margin-left: 40px">
 
-                                <span th:text="${commentChild.getUsername()}"></span>
+                                <span th:text="${commentChild.getUsername()}" style="color: #999;font-size: 12px"></span>
                                 <span th:if="${not #strings.isEmpty(commentChild.getTargetName())}" th:text="'回复：'+${commentChild.getTargetName()}" style="font-size: 12px"></span>
                                 <div th:text="${commentChild.getC_content()}"></div>
-                                <span th:text="${commentChild.getC_time()}" style="font-size: 10px"></span>
+                                <span th:text="${commentChild.getC_time()}" style="font-size: 10px;color: #999"></span>
                                  <!--父评论id，即该楼层发起者的id-->
                                 <p style="display: none" th:text="${comment.getC_id()}"></p>
-                                <a href="javascript:;" class="reply_btn" >回复</a>
+                                <a href="javascript:;" class="reply_btn" style="color: #999;font-size: 12px">回复</a>
                             </div>
                         </div>
                     </div>
@@ -372,7 +332,7 @@
             //获取当前用户的id
             var userId = $("#comment_userID").val();
 
-            alert(name);
+         /*   alert(name);*/
             $(".reply_textarea").remove();
             //插入div
             $(this).parent()

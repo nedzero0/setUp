@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>推荐界面VUE</title>
@@ -45,16 +46,15 @@
     </div>
 
     <div class="layui-body">
-
         <!-- 内容主体区域 -->
         <!--搜索框-->
         <section class="htmleaf-container">
-            <form action="http://localhost:8770/recomm/queryByName">
+            <form v-on:submit.prevent="onSubmit" action="">
                 <div class="search-wrapper" style="z-index: 2">
                     <div class="input-holder">
-                        <input type="text" class="search-input" placeholder="Type to search" name="name" />
+                        <input type="text" class="search-input" placeholder="Type to search" name="name" v-model="queryParams.nameLike"/>
                         <input type="text" name="start" value="1" style="display: none"/>
-                        <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+                        <button class="search-icon" onclick="searchToggle(this, event)"><span></span></button>
                     </div>
                     <span class="close" onclick="searchToggle(this, event);"></span>
                 </div>
@@ -63,34 +63,24 @@
 
         <!--  相册标签和主体-->
         <div class="nav">
-            <ul>
-                <li>
-                    <a href="http://localhost:8770/recomm/queryTag?name=全部&start=1"> 全部</a>
-                </li>
-                <li>
-                    <a href="http://localhost:8770/recomm/queryTag?name=风景&start=1">风景</a>
-                </li>
-                <li>
-                    <a href="http://localhost:8770/recomm/queryTag?name=旅游&start=1"> 旅游</a>
-                </li>
-                <li>
-                    <a href="http://localhost:8770/recomm/queryTag?name=生活&start=1"> 生活</a>
-                </li>
-                <li>
-                    <a href="http://localhost:8770/recomm/queryTag?name=情侣&start=1"> 情侣</a>
-                </li>
+            <ul id="tag">
+                <li @click="OnTag($event)">全部</li>
+                <li @click="OnTag($event)">风景</li>
+                <li @click="OnTag($event)">旅游</li>
+                <li @click="OnTag($event)">生活</li>
+                <li @click="OnTag($event)">情侣</li>
 
             </ul>
         </div>
 
         <div class="divAdmain">
             <ul>
-                <li class="admin" th:each="albums,albumsStat : ${session.re_albums}">
+                <li class="admin"  v-for="item of recommends" :key="item">
                     <div class="admin_div1">
-                        <a th:href="@{/recomm/queryByAmID(aid=${albums.getAid()})}" target="_blank">
-                            <img src="../static/images/2.jpg" style="overflow: hidden">
+                        <a :href="'/recomm/queryByAmID?aid='+item.aid" target="_blank">
+                            <img :src="item.a_coverPath" style="overflow: hidden;max-width: none;object-fit: cover">
                         </a>
-                        <span th:text="${albums.getA_name()}"></span>
+                      <span>{{item.a_name}}</span>
                     </div>
                 </li>
 
@@ -100,50 +90,19 @@
         </div>
 
         <!-- 底部分页-->
-        <div class="bottom_page">
-            <span th:text="'共'+${session.page.rows}+'页'" style="color: #00FFFF">100</span>
-            <!--  <div id="demo7"></div>-->
-            <!--当前页码等于1-->
-            <li th:if="${session.page.current} eq 1">
-                <a th:href="@{${session.page.path}+''+${session.page.current}}">上一页</a>
-            </li>
-            <!--当前页码大于1-->
-            <li th:if="${session.page.current} gt 1">
-                <a th:href="@{${session.page.path}+''+${session.page.current - 1}}">上一页</a>
-            </li>
-
-            <!--当前页码小于 总页码-->
-            <li th:if="${session.page.current} eq ${session.page.rows}">
-                <a th:href="@{${session.page.path}+''+${session.page.current}}">下一页</a>
-            </li>
-            <!--当前页码等于总页码-->
-            <li th:if="${session.page.current} lt ${session.page.rows}">
-                <a th:href="@{${session.page.path}+''+${session.page.current +1}}">下一页</a>
-            </li>
 
 
-            <span>
-
-           <form action="http://localhost:8770/recomm/queryTag">
-               <input type="text" name="name" th:value="${session.page.name}" style="display: none">
-                  <input type="text" name="start"/>
-               <input type="submit" value="跳转">
-           </form>
-           </span>
-        </div>
-
-        <div id="app">
+        <div id="app" style="padding: 15px 0px; text-align: center;position: fixed;bottom: 10px;margin: auto;left: 0;right: 0">
             <template>
                 <div class="block">
-                    <span class="demonstration">完整功能</span>
                     <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-sizes="[100, 200, 300, 400]"
-                            :page-size="100"
+                            @size-change="OnSizeChange"
+                            @current-change="OnCurrentChange"
+                            :current-page="pageNum"
+                            :page-sizes="pageSizes"
+                            :page-size="pageSize"
                             layout="total, sizes, prev, pager, next, jumper"
-                            :total="400">
+                            :total="count">
                     </el-pagination>
                 </div>
             </template>
@@ -158,30 +117,32 @@
 <script src="../static/layui/layui.js"></script>
 
 <script>
-    var Main = {
-        methods: {
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+
+    var tag;
+
+    window.onload = function(){
+        var obj_lis = document.getElementById("tag").getElementsByTagName("li");
+        for(i=0;i<obj_lis.length;i++){
+            obj_lis[i].onclick = function(){
+               tag = this.innerHTML;
             }
-        },
+        }
+    }
+    const pageSizes=[10,2,3];  //设置每页数量 数组
+
+    var Main = {
         data() {
             return {
-                currentPage1: 5,
-                currentPage2: 5,
-                currentPage3: 5,
-                currentPage4: 4,
-
+                pageSizes,
                 pageNum:1,  //当前页码
                 pageSize:6,  //当前页的数量
+                count:null,
                 queryParams:{    //按相册和类型查询 或用户名
                     nameLike:null,  //相册名称
                     tagLike:null,    //类型名称
                     userLike:null
                 },
-                devices:[]  //返回的数据
+                recommends:[]  //返回的数据
             }
         },
         mounted(){
@@ -198,19 +159,48 @@
                 console.log(params);
                 axios.get("http://localhost:8770/recomm/pageVue",{params:params})
                     .then(function (response) {
-                        that.devices = response.data;
-                        console.log(response)
+                        that.recommends = response.data.list;
+                        console.log("eeee");
+                        console.log(that.recommends);
+                        that.count = response.data.total;
                         console.log("成功")
                     },function (err) {
                        console.log("数据出错")
                     })
 
+            },
+            OnSizeChange(pageSize) {
+                console.log(`每页 ${pageSize} 条`);
+                this.pageSize = pageSize;
+                this.init()
+            },
+            OnCurrentChange(pageNum) {
+                console.log(`当前页: ${pageNum}`);
+                this.pageNum = pageNum;
+                this.init()
+            },
+            onClick(){
+                this.tagLike = tag;
+                console.log("tag是："+this.tagLike);
+            },
+            OnTag: function(event) {
+                //获取点击对象
+                var el = event.currentTarget;
+               /* alert("当前对象的内容："+el.innerHTML);*/
+                console.log(el.innerHTML);
+                this.queryParams.nameLike = null;
+                var tag = el.innerHTML;
+                this.queryParams.tagLike = tag;
+                this.init();
+            },
+            onSubmit(){
+                this.init();
             }
         }
 
     }
-    var Ctor = Vue.extend(Main)
-    new Ctor().$mount('#app')
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('.layui-body');
 </script>
 
 

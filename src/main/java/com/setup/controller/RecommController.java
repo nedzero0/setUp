@@ -270,8 +270,11 @@ public class RecommController {
                        @RequestParam(value = "pageSize") Integer pageSize,
                        @RequestParam(value = "pageNum") Integer pageNum){
 
-         System.out.println(albumQuery);
-         System.out.println(pageSize+" ::"+pageNum);
+         /*System.out.println(albumQuery);
+         System.out.println(pageSize+" ::"+pageNum);*/
+         if("全部".equals(albumQuery.getTagLike())){
+             albumQuery.setTagLike("");
+         }
          return recommendService.query(albumQuery, pageSize, pageNum);
      }
 

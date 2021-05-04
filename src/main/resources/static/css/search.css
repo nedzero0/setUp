@@ -12,6 +12,14 @@
     z-index: 1;
     overflow:hidden;
 }
+
+.admin_div1 span{
+    position: absolute;
+    bottom: 10px;
+    padding-left: 10px;
+    width: 100%;
+}
+
 .admin_div1 img{
     /*图片居中全部显示*/
     position: absolute;
@@ -42,11 +50,12 @@
 }
 .nav ul li{
     float: left;
-    margin-right: 10px
+    margin-right: 10px;
+    cursor: pointer;
 }
 .divAdmain{
     padding: 15px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .divAdmain ul:after{
     content: "";
