@@ -80,7 +80,7 @@
             <input th:value="${session.currentAlbum.getAid()}" id="album-input" style="display: none"/>
            <!-- <span id="album_id" th:text="${session.currentAlbum.getAid()}">相册id</span>-->
             <p><span th:text="${session.currentAlbum.getA_name()}"></span></p>
-            <p>描述:<span th:text="${session.currentAlbum.getA_describe()}" style="font-size: 13px"></span></p>
+            <p style="font-size: 13px;margin-top: 6px">描述:<span th:text="${session.currentAlbum.getA_describe()}" style="font-size: 13px"></span></p>
             <p style="margin-top: 20px;font-size: 12px">
                 <span>创建日期：</span>
                 <span th:text="${session.currentAlbum.getA_createTime()}">2020-01-12</span>
@@ -120,7 +120,7 @@
                <textarea placeholder="提点意见，让TA有所进步" form="commentForms" name="comment" style="margin-top: 0px; margin-bottom: 0px; height: 79px;"></textarea>
               <div class="comment__textarea_form" style="overflow: hidden">
                   <form action="/recomm/comment" method="post" id="commentForms">
-                      <input type="text" style="display: none" name="album_id" th:value="${session.currentAlbum.getAid()}">
+                      <input id="album_id" type="text" style="display: none" name="album_id" th:value="${session.currentAlbum.getAid()}">
                       <input id="comment_userID" type="text" style="display: none" name="userID" th:value="${session.user}!=null ?${session.user.getUid()}:''">
                       <input type="submit" value="评论" style="float: right">
                   </form>
@@ -135,7 +135,7 @@
                 <div class="cc_comment_part">
 
                         <a style="position:absolute;">
-                          <img class="layui-nav-img" th:src="'/' + ${comment.getProfile_photo()}">
+                          <img class="layui-nav-img" th:src="${comment.getProfile_photo()}!=null ?'/' + ${comment.getProfile_photo()}:'http://t.cn/RCzsdCq'">
                         </a>
                         <div style="margin-left: 40px">
 
@@ -151,7 +151,7 @@
                     <div th:if="${not #strings.isEmpty(comment.getChild())}">
                         <div th:each="commentChild:${comment.getChild()}" style="margin-top: 10px;margin-left: 20px">
                             <a style="position:absolute;">
-                                <img class="layui-nav-img" th:src="'/' + ${commentChild.getProfile_photo()}">
+                                <img class="layui-nav-img" th:src="${commentChild.getProfile_photo()} !=null?'/' + ${commentChild.getProfile_photo()}:'http://t.cn/RCzsdCq'">
                             </a>
                             <div style="margin-left: 40px">
 
@@ -263,11 +263,12 @@
 
             },
             cancelCollect(){ //取消收藏
+                var that = this;
                 console.log("取消收藏");
                 axios.get("http://localhost:8770/album/deleteCollect?id="+this.collect.id+"&aid="+this.collect.aid)
                     .then(function (response) {
                         that.$message({
-                            message: '取消点赞',
+                            message: '取消收藏',
                             type: 'success'
                         });
                         location.reload();
@@ -296,6 +297,7 @@
                 }
             },
             cancelLikes(){
+                var that = this;
                 console.log("取消点赞");
                 axios.get("http://localhost:8770/album/deleteLikes?id="+this.likes.id+"&aid="+this.likes.aid)
                     .then(function (response) {
@@ -324,7 +326,7 @@
         //页面加载完毕后开始执行的事件
         $(".reply_btn").click(function(){
             //获取相册的id
-            var album_id = $("#album_id").text();
+            var album_id = $("#album_id").val();
             //获取回复对象的名称,即兄弟节点的第一个元素的值
             var name =  $(this).siblings(":first").text();
             //获取父回复的id,即评论楼id
@@ -333,8 +335,9 @@
             var userId = $("#comment_userID").val();
 
          /*   alert(name);*/
+            //删除 存在的回复框
             $(".reply_textarea").remove();
-            //插入div
+            //插入div  回复框
             $(this).parent()
                 .append("" +
                     "<div class='reply_textarea'>" +

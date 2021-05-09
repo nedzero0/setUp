@@ -431,7 +431,11 @@ public class AlbumController {
         //更新数据库点赞个数信息
         //找到该相册并更新
         Album album = albumService.queryAlbumByAid(aid);
-        album.setA_likes(album.getA_likes()-1);
+        if (album.getA_likes()==0){
+            album.setA_likes(0);
+        }else{
+            album.setA_likes(album.getA_likes()-1);
+        }
         albumService.updateAlbum(album);
         //删除点赞表信息
         likesService.deleteLikes(id);

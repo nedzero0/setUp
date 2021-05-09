@@ -6,6 +6,18 @@
    /* background-color: #00FFFF;*/
     overflow:auto;
 }
+.cc_left::-webkit-scrollbar{
+    width: 5px; /*宽对应竖滚动条的尺寸宽度*/
+    height: 5px; /*高对应横滚动条的尺寸高度*/
+}
+.cc_left::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background: #242424; /* 竖直滚动块的颜色 */
+}
+.cc_left::-webkit-scrollbar-track{
+    border-radius: 10px;
+    background: aliceblue; /* 轨道的背景颜色 */
+}
 
 
 .cc_right{
