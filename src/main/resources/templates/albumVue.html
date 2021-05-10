@@ -140,7 +140,7 @@
 <script>
 
     var a = 0;
-    var lists = document.getElementsByClassName("lists-value");
+    var lists = document.getElementsByClassName("lists-value");//删除list
 
     var Main = {
         data() {
@@ -373,7 +373,7 @@
                 obj.preview(function(index, file, result){
                     var tr = $(['<tr id="upload-'+ index +'">'
                         ,'<td>'+ file.name +'</td>'
-                        ,'<td><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></td>'
+                        ,'<td><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></td>'  //图片缩略图
                         ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
                         ,'<td>等待上传</td>'
                         ,'<td>'

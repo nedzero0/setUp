@@ -119,7 +119,7 @@
 <script>
 
     var tag;
-
+    //获得点击的标签  如：风景，旅行等
     window.onload = function(){
         var obj_lis = document.getElementById("tag").getElementsByTagName("li");
         for(i=0;i<obj_lis.length;i++){
@@ -135,7 +135,7 @@
             return {
                 pageSizes,
                 pageNum:1,  //当前页码
-                pageSize:6,  //当前页的数量
+                pageSize:10,  //当前页的数量
                 count:null,
                 queryParams:{    //按相册和类型查询 或用户名
                     nameLike:null,  //相册名称
@@ -151,7 +151,7 @@
         methods:{
             init(){
                 //设置前端传给后端的  json对象
-                const params = {...this.queryParams};
+                const params = {...this.queryParams};//扩展运算符，将一个数组转为用逗号分隔的参数序列。
                 params.pageSize = this.pageSize;
                 params.pageNum = this.pageNum;
 

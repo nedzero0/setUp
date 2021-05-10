@@ -67,10 +67,10 @@ public class UserController {
             List<Image> images = imageService.queryReImage(user.getUid());
             session.setAttribute("reImages",images);
 
-          //添加头像路径  /  是浏览器默认路径
-            if (user.getProfile_photo()!=null){
+          //添加头像路径  /  是浏览器默认路径  //没用了这个session
+       /*     if (user.getProfile_photo()!=null){
                 session.setAttribute("headName","/"+user.getProfile_photo());
-            }
+            }*/
 
             System.out.println("登录成功");
             return "redirect:/own/personal.html";

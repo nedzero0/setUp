@@ -241,7 +241,7 @@
                     ,content: $('.updateAlbumDiv').eq(i) //显示第i个的内容，在session中的第i个
                     ,btn: ["确认", "取消"] //只是为了演示
                     ,yes: function(index, layero){
-                        alert(JSON.stringify(getFormData($(".form2").eq(i))));
+                       /* alert(JSON.stringify(getFormData($(".form2").eq(i))));*/
                         $.ajax({
                             type:"post",
                             dataType:"json",
